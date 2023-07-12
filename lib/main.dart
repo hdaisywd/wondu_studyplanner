@@ -161,6 +161,8 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                         child: ListTile(
+                          leading:
+                              task.isPinned ? Icon(CupertinoIcons.pin_fill) : null,
                           // 메모 내용 (최대 3줄까지만 보여주도록)
                           title: Text(
                             task.content,
