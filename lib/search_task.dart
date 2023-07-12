@@ -24,6 +24,7 @@ class _SearchTaskState extends State<SearchTask> {
 
         return Scaffold(
           appBar: AppBar(
+            backgroundColor: Color.fromARGB(159, 255, 158, 190),
             title: Container(
               width: double.infinity,
               height: 40,
