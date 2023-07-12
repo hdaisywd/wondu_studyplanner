@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mytask/search_task.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -75,22 +76,16 @@ class _HomePageState extends State<HomePage> {
                   iconColor: Colors.purple,
                   focusColor: Colors.purple,
                   title: Text('홈'),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
                   trailing: Icon(Icons.navigate_next),
                 ),
                 ListTile(
-                  leading: Icon(Icons.shopping_cart_rounded),
+                  leading: Icon(Icons.category),
                   iconColor: Colors.purple,
                   focusColor: Colors.purple,
-                  title: Text('날짜별'),
-                  onTap: () {},
-                  trailing: Icon(Icons.navigate_next),
-                ),
-                ListTile(
-                  leading: Icon(Icons.shopping_cart_rounded),
-                  iconColor: Colors.purple,
-                  focusColor: Colors.purple,
-                  title: Text('카테고리별'),
+                  title: Text('카테고리'),
                   onTap: () {},
                   trailing: Icon(Icons.navigate_next),
                 ),
@@ -186,39 +181,6 @@ class _HomePageState extends State<HomePage> {
           ),
         );
       },
-    );
-  }
-}
-
-class SearchTask extends StatelessWidget {
-  const SearchTask({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Container(
-          width: double.infinity,
-          height: 40,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: TextField(
-            decoration: InputDecoration(
-              prefixIcon: Icon(Icons.search),
-              suffixIcon: IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.clear),
-              ),
-              hintText: 'Search...',
-              border: InputBorder.none,
-            ),
-          ),
-        ),
-      ),
     );
   }
 }
