@@ -130,12 +130,15 @@ class _HomePageState extends State<HomePage> {
                   itemBuilder: (context, index) {
                     Task task = taskList[index]; // index에 해당하는 task 가져오기
                     return Slidable(
-                        key: const ValueKey(0),
+                        key: UniqueKey(), // 트리에서 삭제 문제 해결
                         startActionPane: ActionPane(
                           motion: const ScrollMotion(),
                           children: [
                             SlidableAction(
-                              onPressed: null,
+                              //onPressed:
+                              onPressed: (context) {
+                                taskService.updatePinTask(index: index);
+                              },
                               backgroundColor: Color(0xFF21B7CA),
                               foregroundColor: Colors.white,
                               icon: Icons.push_pin,
@@ -145,11 +148,16 @@ class _HomePageState extends State<HomePage> {
                         endActionPane: ActionPane(
                           // swipe from right to left
                           motion: ScrollMotion(),
-                          dismissible: DismissiblePane(onDismissed: () {}),
+                          // dismissible: DismissiblePane(onDismissed: () {
+                          //   taskService.deleteTask(index: index); // 리스트에서 밀어서 삭제
+                          // }),
                           children: [
                             SlidableAction(
+                                autoClose: false,
                                 flex: 2,
-                                onPressed: null,
+                                onPressed: (context) {
+                                  taskService.deleteTask(index: index);
+                                },
                                 backgroundColor: Color(0xFFFE4A49),
                                 foregroundColor: Colors.white,
                                 icon: Icons.delete,
@@ -157,6 +165,8 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                         child: ListTile(
+                          leading:
+                              task.isPinned ? Icon(CupertinoIcons.pin_fill) : null,
                           // 메모 내용 (최대 3줄까지만 보여주도록)
                           title: Text(
                             task.content,
