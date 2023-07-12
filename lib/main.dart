@@ -110,8 +110,12 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           appBar: AppBar(
+            title: Image.asset(
+              'images/wondu_appbar_image.png',
+              width: 150,
+            ),
             backgroundColor: Color.fromARGB(159, 255, 158, 190),
-            title: Text("mytask"),
+            centerTitle: true,
             actions: [
               IconButton(
                   onPressed: () => Navigator.of(context)
@@ -181,7 +185,11 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
           floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.add),
+            backgroundColor: Color.fromARGB(159, 255, 158, 190),
+            child: Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
             onPressed: () async {
               // + 버튼 클릭시 메모 생성 및 수정 페이지로 이동
               taskService.createTask(content: '');

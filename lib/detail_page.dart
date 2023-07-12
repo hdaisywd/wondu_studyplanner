@@ -40,6 +40,11 @@ class _DetailPageState extends State<DetailPage> {
       },
       child: Scaffold(
         appBar: AppBar(
+          title: Image.asset(
+            'images/wondu_appbar_image.png',
+            width: 150,
+          ),
+          centerTitle: true,
           backgroundColor: Color.fromARGB(159, 255, 158, 190),
           leading: TextButton(
             style: TextButton.styleFrom(
@@ -55,11 +60,6 @@ class _DetailPageState extends State<DetailPage> {
             ),
           ),
           leadingWidth: 65,
-          title: Text(
-            task.content,
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          centerTitle: true,
           actions: [
             IconButton(
               onPressed: () {
