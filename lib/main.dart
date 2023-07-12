@@ -126,13 +126,15 @@ class _HomePageState extends State<HomePage> {
                   itemBuilder: (context, index) {
                     Task task = taskList[index]; // index에 해당하는 task 가져오기
                     return Slidable(
-                        key: UniqueKey(),
+                        key: UniqueKey(), // 트리에서 삭제 문제 해결
                         startActionPane: ActionPane(
                           motion: const ScrollMotion(),
                           children: [
                             SlidableAction(
-                              onPressed:
-                                  taskService.updatePinTask(index: index),
+                              //onPressed:
+                              onPressed: (context) {
+                                taskService.updatePinTask(index: index);
+                              },
                               backgroundColor: Color(0xFF21B7CA),
                               foregroundColor: Colors.white,
                               icon: Icons.push_pin,
@@ -142,14 +144,16 @@ class _HomePageState extends State<HomePage> {
                         endActionPane: ActionPane(
                           // swipe from right to left
                           motion: ScrollMotion(),
-                          dismissible: DismissiblePane(onDismissed: () {
-                            taskService.deleteTask(index: index); // 리스트에서 삭제
-                          }),
+                          // dismissible: DismissiblePane(onDismissed: () {
+                          //   taskService.deleteTask(index: index); // 리스트에서 밀어서 삭제
+                          // }),
                           children: [
                             SlidableAction(
                                 autoClose: false,
                                 flex: 2,
-                                onPressed: null,
+                                onPressed: (context) {
+                                  taskService.deleteTask(index: index);
+                                },
                                 backgroundColor: Color(0xFFFE4A49),
                                 foregroundColor: Colors.white,
                                 icon: Icons.delete,
