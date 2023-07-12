@@ -126,12 +126,13 @@ class _HomePageState extends State<HomePage> {
                   itemBuilder: (context, index) {
                     Task task = taskList[index]; // index에 해당하는 task 가져오기
                     return Slidable(
-                        key: const ValueKey(0),
+                        key: UniqueKey(),
                         startActionPane: ActionPane(
                           motion: const ScrollMotion(),
                           children: [
                             SlidableAction(
-                              onPressed: null,
+                              onPressed:
+                                  taskService.updatePinTask(index: index),
                               backgroundColor: Color(0xFF21B7CA),
                               foregroundColor: Colors.white,
                               icon: Icons.push_pin,
@@ -141,9 +142,12 @@ class _HomePageState extends State<HomePage> {
                         endActionPane: ActionPane(
                           // swipe from right to left
                           motion: ScrollMotion(),
-                          dismissible: DismissiblePane(onDismissed: () {}),
+                          dismissible: DismissiblePane(onDismissed: () {
+                            taskService.deleteTask(index: index); // 리스트에서 삭제
+                          }),
                           children: [
                             SlidableAction(
+                                autoClose: false,
                                 flex: 2,
                                 onPressed: null,
                                 backgroundColor: Color(0xFFFE4A49),

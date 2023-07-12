@@ -53,8 +53,8 @@ class TaskService extends ChangeNotifier {
   }
 
   List<Task> taskList = [
-    Task(content: '장보기 목록: 사과, 양파'), // 더미(dummy) 데이터
-    Task(content: '메모 메모'), // 더미(dummy) 데이터
+    // Task(content: '장보기 목록: 사과, 양파'), // 더미(dummy) 데이터
+    // Task(content: '메모 메모'), // 더미(dummy) 데이터
   ];
 
   createTask({required String content}) {
