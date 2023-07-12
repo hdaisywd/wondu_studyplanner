@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:mytask/search_task.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -59,7 +60,7 @@ class _HomePageState extends State<HomePage> {
               children: [
                 UserAccountsDrawerHeader(
                   currentAccountPicture: CircleAvatar(
-                    backgroundImage: AssetImage('assets/image/dog.jpg'),
+                    backgroundImage: AssetImage('images/wondu.jpeg'),
                   ),
                   accountName: Text('원두네'),
                   accountEmail: Text('wondu@gmail.com'),
@@ -124,41 +125,59 @@ class _HomePageState extends State<HomePage> {
                   itemCount: taskList.length, // taskList 개수 만큼 보여주기
                   itemBuilder: (context, index) {
                     Task task = taskList[index]; // index에 해당하는 task 가져오기
-                    return ListTile(
-                      // 메모 고정 아이콘
-                      leading: IconButton(
-                        icon: Icon(task.isPinned
-                            ? CupertinoIcons.pin_fill
-                            : CupertinoIcons.pin),
-                        onPressed: () {
-                          taskService.updatePinTask(index: index);
-                        },
-                      ),
-                      // 메모 내용 (최대 3줄까지만 보여주도록)
-                      title: Text(
-                        task.content,
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      trailing: Text(task.updatedAt == null
-                          ? ""
-                          : task.updatedAt.toString().substring(0, 16)),
-
-                      onTap: () async {
-                        // 아이템 클릭시
-                        await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => DetailPage(
-                              index: index,
+                    return Slidable(
+                        key: const ValueKey(0),
+                        startActionPane: ActionPane(
+                          motion: const ScrollMotion(),
+                          children: [
+                            SlidableAction(
+                              onPressed: null,
+                              backgroundColor: Color(0xFF21B7CA),
+                              foregroundColor: Colors.white,
+                              icon: Icons.push_pin,
                             ),
+                          ],
+                        ),
+                        endActionPane: ActionPane(
+                          // swipe from right to left
+                          motion: ScrollMotion(),
+                          dismissible: DismissiblePane(onDismissed: () {}),
+                          children: [
+                            SlidableAction(
+                                flex: 2,
+                                onPressed: null,
+                                backgroundColor: Color(0xFFFE4A49),
+                                foregroundColor: Colors.white,
+                                icon: Icons.delete,
+                                label: 'Delete'),
+                          ],
+                        ),
+                        child: ListTile(
+                          // 메모 내용 (최대 3줄까지만 보여주도록)
+                          title: Text(
+                            task.content,
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                        );
-                        if (task.content.isEmpty) {
-                          taskService.deleteTask(index: index);
-                        }
-                      },
-                    );
+                          trailing: Text(task.updatedAt == null
+                              ? ""
+                              : task.updatedAt.toString().substring(0, 16)),
+
+                          onTap: () async {
+                            // 아이템 클릭시
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => DetailPage(
+                                  index: index,
+                                ),
+                              ),
+                            );
+                            if (task.content.isEmpty) {
+                              taskService.deleteTask(index: index);
+                            }
+                          },
+                        ));
                   },
                 ),
           floatingActionButton: FloatingActionButton(
