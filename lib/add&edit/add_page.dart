@@ -2,25 +2,30 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mytask/show_category.dart';
+import 'package:mytask/etc/show_category.dart';
 import 'package:provider/provider.dart';
 
-import 'task_service.dart';
+import '../data/task_service.dart';
 
-class DetailPage extends StatefulWidget {
-  const DetailPage({super.key, required this.index});
+class AddPage extends StatefulWidget {
+  const AddPage({super.key, required this.index});
 
+  /* index Int */
   final int index;
 
   @override
-  State<DetailPage> createState() => _DetailPageState();
+  State<AddPage> createState() => _AddPageState();
 }
 
-class _DetailPageState extends State<DetailPage> {
+class _AddPageState extends State<AddPage> {
+  /* 제목 텍스트 편집 컨트롤러 */
   TextEditingController contentController = TextEditingController();
+  /* 날짜 텍스트 편집 컨트롤러 */
   TextEditingController dateInput = TextEditingController();
-  // fix: dueDate 컨트롤러 생성?
-  TextEditingController detailController = TextEditingController();
+  /* 내용 텍스트 편집 컨트롤러 */
+  TextEditingController addController = TextEditingController();
+
+  /* 선택된 아이콘 번호 변수 */
   int selectedIconNum = 7;
 
   @override
@@ -28,11 +33,18 @@ class _DetailPageState extends State<DetailPage> {
     TaskService taskService = context.read<TaskService>();
     Task task = taskService.taskList[widget.index];
 
-    contentController.text = task.content;
+    // contentController.text = task.content;
     // fix: 날짜 추가
     //dateInput.text = ??;
-    detailController.text = task.detail ?? '';
-    selectedIconNum = task.category;
+    // addController.text = task.detail ?? '';
+    // selectedIconNum = task.category;
+
+    /* 제목 변수 */
+    var title = '';
+    /* 날짜 변수 */
+    DateTime dueDate = DateTime.now();
+    /* 내용 변수 */
+    var detail = '';
 
     return GestureDetector(
       onTap: () {
@@ -40,16 +52,13 @@ class _DetailPageState extends State<DetailPage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Image.asset(
-            'images/wondu_appbar_image.png',
-            width: 150,
-          ),
-          centerTitle: true,
           backgroundColor: Color.fromARGB(159, 255, 158, 190),
           leading: TextButton(
             style: TextButton.styleFrom(
               foregroundColor: Colors.white,
             ),
+
+            /// 뒤로 가기 버튼 클릭 시
             onPressed: () => Navigator.pop(context),
             child: Row(
               //mainAxisAlignment: MainAxisAlignment.center,
@@ -60,13 +69,25 @@ class _DetailPageState extends State<DetailPage> {
             ),
           ),
           leadingWidth: 65,
+          title: Text(
+            /// 상단 중앙 제목
+            "Add Task",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          centerTitle: true,
           actions: [
-            IconButton(
+            TextButton(
               onPressed: () {
-                // 삭제 버튼 클릭시
-                showDeleteDialog(context, taskService);
+                // save 버튼 클릭 시 -> task 항목 추가, 뷰 pop
+                if (title != "" && dueDate != DateTime.now()) {
+                  /// 제목과 날짜 필수 처리
+                  taskService.createTask(
+                      content: title, dueDate: dueDate, detail: detail);
+                  Navigator.pop(context);
+                }
               },
-              icon: Icon(Icons.delete),
+              style: TextButton.styleFrom(foregroundColor: Colors.white),
+              child: Text('Save'),
             )
           ],
         ),
@@ -84,9 +105,12 @@ class _DetailPageState extends State<DetailPage> {
                     labelText: "Task",
                   ),
                   onChanged: (value) {
-                    taskService.updateTask(index: widget.index, content: value);
+                    title = value;
+
+                    /// title 값 전달
+                    // taskService.updateTask(index: widget.index, content: value);
                   },
-                  // fix: 완료 누르면 타이틀 바뀌게
+                  // fix: 완료 누르면 타이틀 바뀌게 -> xx
                   onEditingComplete: () {
                     setState(
                       () {},
@@ -112,13 +136,15 @@ class _DetailPageState extends State<DetailPage> {
                     );
 
                     if (pickedDate != null) {
-                      print(pickedDate);
+                      // print(pickedDate);
                       String formattedDate =
                           DateFormat('yyyy-MM-dd').format(pickedDate);
-                      print(formattedDate);
+                      debugPrint(formattedDate);
                       setState(
                         () {
-                          dateInput.text = formattedDate;
+                          dueDate = pickedDate; // dueDate 값 전달(DateTime)
+                          dateInput.text =
+                              formattedDate; // dateinput text 변경(String)
                           // fix: task.dueDate = pickedDate;
                         },
                       );
@@ -128,7 +154,7 @@ class _DetailPageState extends State<DetailPage> {
                 ),
                 Container(height: 45.0),
                 TextField(
-                  controller: detailController,
+                  controller: addController,
                   decoration: InputDecoration(
                     // fix: icon 상단 고정
                     icon: Icon(CupertinoIcons.text_append),
@@ -139,9 +165,12 @@ class _DetailPageState extends State<DetailPage> {
                   minLines: 1,
                   maxLines: 8,
                   onChanged: (value) {
+                    detail = value;
+
+                    /// description 값 전달
                     // fix: 상세 내용으로 변경
-                    taskService.updateDetail(
-                        index: widget.index, detail: value);
+                    // taskService.updateDetail(
+                    //     index: widget.index, Add: value);
                   },
                 ),
                 Padding(
@@ -160,99 +189,4 @@ class _DetailPageState extends State<DetailPage> {
       ),
     );
   }
-
-  void showDeleteDialog(BuildContext context, TaskService taskService) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text("정말로 삭제하시겠습니까?"),
-          actions: [
-            // 취소 버튼
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text("취소"),
-            ),
-            // 확인 버튼
-            TextButton(
-              onPressed: () {
-                taskService.deleteTask(index: widget.index);
-                Navigator.pop(context); // 팝업 닫기
-                Navigator.pop(context); // HomePage 로 가기
-              },
-              child: Text(
-                "확인",
-                style: TextStyle(color: Colors.pink),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
 }
-
-// class ShowCategory extends StatefulWidget {
-//   ShowCategory({
-//     super.key,
-//     required this.selectedIconNum,
-//     required this.taskService,
-//     required this.index,
-//   });
-
-//   int selectedIconNum;
-//   TaskService taskService;
-//   int index;
-
-//   @override
-//   State<ShowCategory> createState() => _ShowCategoryState();
-// }
-
-// class _ShowCategoryState extends State<ShowCategory> {
-//   void changeIcon(int num) {
-//     setState(() {
-//       widget.selectedIconNum = num;
-//       widget.taskService.updateCategory(
-//           index: widget.index, category: widget.selectedIconNum);
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       children: [
-//         Row(
-//           mainAxisAlignment: MainAxisAlignment.spaceAround,
-//           children: [
-//             //버튼에 자신의 번호, 선택되어 있는 번호, 아이콘, setState를 넘겨줌
-//             CategoryIcon(
-//                 0, widget.selectedIconNum, CupertinoIcons.book, changeIcon),
-//             CategoryIcon(1, widget.selectedIconNum,
-//                 CupertinoIcons.building_2_fill, changeIcon),
-//             CategoryIcon(2, widget.selectedIconNum, CupertinoIcons.sportscourt,
-//                 changeIcon),
-//             CategoryIcon(3, widget.selectedIconNum,
-//                 CupertinoIcons.gamecontroller, changeIcon),
-//           ],
-//         ),
-//         Container(height: 10.0),
-//         Row(
-//           mainAxisAlignment: MainAxisAlignment.spaceAround,
-//           children: [
-//             //버튼에 자신의 번호, 선택된 번호, 아이콘, setState를 넘겨줌
-//             CategoryIcon(
-//                 4, widget.selectedIconNum, CupertinoIcons.cart, changeIcon),
-//             CategoryIcon(
-//                 5, widget.selectedIconNum, CupertinoIcons.bus, changeIcon),
-//             CategoryIcon(
-//                 6, widget.selectedIconNum, CupertinoIcons.bandage, changeIcon),
-//             CategoryIcon(7, widget.selectedIconNum,
-//                 CupertinoIcons.square_favorites_alt, changeIcon),
-//           ],
-//         ),
-//       ],
-//     );
-//   }
-// }

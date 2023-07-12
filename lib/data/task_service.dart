@@ -2,13 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'main.dart';
+import '../main.dart';
 
 // Task 데이터의 형식을 정해줍니다. 추후 isPinned, updatedAt 등의 정보도 저장할 수 있습니다.
 class Task {
   Task({
     required this.content,
-    //required this.dueDate,
+    required this.dueDate,
     this.detail,
     this.category = 7,
     this.isPinned = false,
@@ -16,7 +16,7 @@ class Task {
   });
 
   String content;
-  //DateTime dueDate;
+  DateTime dueDate;
   String? detail;
   int category;
   bool isPinned;
@@ -25,7 +25,7 @@ class Task {
   Map toJson() {
     return {
       'content': content,
-      //'dueDate': dueDate.toIso8601String(),
+      'dueDate': dueDate,
       'detail': detail,
       'category': category,
       'isPinned': isPinned,
@@ -36,7 +36,7 @@ class Task {
   factory Task.fromJson(json) {
     return Task(
       content: json['content'],
-      //dueDate: DateTime.parse(json['dueDate']),
+      dueDate: DateTime.parse(json['dueDate'] ?? DateTime(2020, 1, 1)),
       detail: json['detail'] ?? '',
       category: json['category'] ?? 7,
       isPinned: json['isPinned'] ?? false,
@@ -53,20 +53,31 @@ class TaskService extends ChangeNotifier {
   }
 
   List<Task> taskList = [
-    Task(content: '장보기 목록: 사과, 양파'), // 더미(dummy) 데이터
-    Task(content: '메모 메모'), // 더미(dummy) 데이터
+    Task(
+        content: '장보기 목록: 사과, 양파',
+        dueDate: DateTime(2020, 1, 1)), // 더미(dummy) 데이터
+    Task(content: '메모 메모', dueDate: DateTime(2020, 1, 1)), // 더미(dummy) 데이터
   ];
 
-  createTask({required String content}) {
-    Task task = Task(content: content, updatedAt: DateTime.now());
+  createTask(
+      {required String content, required DateTime dueDate, String? detail}) {
+    Task task = Task(
+        content: content,
+        updatedAt: DateTime.now(),
+        dueDate: dueDate,
+        detail: detail);
     taskList.add(task);
     notifyListeners();
     saveTaskList(); // Consumer<TaskService>의 builder 부분을 호출해서 화면 새로고침
   }
 
-  updateTask({required int index, required String content}) {
+  updateTask(
+      {required int index,
+      required String content,
+      required DateTime dueDate}) {
     Task task = taskList[index];
     task.content = content;
+    task.dueDate = dueDate;
     task.updatedAt = DateTime.now();
     notifyListeners();
     saveTaskList();

@@ -1,12 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:mytask/search_task.dart';
+import 'package:intl/intl.dart';
+import 'package:mytask/etc/search_task.dart';
+import 'package:mytask/add&edit/add_page.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'detail_page.dart';
-import 'task_service.dart';
+import 'add&edit/detail_page.dart';
+import 'data/task_service.dart';
 
 late SharedPreferences prefs;
 
@@ -165,17 +167,22 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                         child: ListTile(
-                          leading:
-                              task.isPinned ? Icon(CupertinoIcons.pin_fill) : null,
+                          leading: task.isPinned
+                              ? Icon(CupertinoIcons.pin_fill)
+                              : null,
                           // 메모 내용 (최대 3줄까지만 보여주도록)
                           title: Text(
                             task.content,
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          trailing: Text(task.updatedAt == null
-                              ? ""
-                              : task.updatedAt.toString().substring(0, 16)),
+                          trailing: Text(
+                              DateFormat('yyyy-MM-dd').format(task.dueDate)
+                              // task.dueDate.toString()
+                              // task.updatedAt == null
+                              //   ? ""
+                              //   : task.updatedAt.toString().substring(0, 16)
+                              ),
 
                           onTap: () async {
                             // 아이템 클릭시
@@ -202,18 +209,19 @@ class _HomePageState extends State<HomePage> {
             ),
             onPressed: () async {
               // + 버튼 클릭시 메모 생성 및 수정 페이지로 이동
-              taskService.createTask(content: '');
+              // taskService.createTask(
+              //     content: '', dueDate: DateTime(2020, 2, 2));
               await Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => DetailPage(
+                  builder: (_) => AddPage(
                     index: taskService.taskList.length - 1,
                   ),
                 ),
               );
-              if (taskList.last.content.isEmpty) {
-                taskService.deleteTask(index: taskList.length - 1);
-              }
+              // if (taskList.last.content.isEmpty) {
+              //   taskService.deleteTask(index: taskList.length - 1);
+              // }
             },
           ),
         );

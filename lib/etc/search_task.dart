@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mytask/detail_page.dart';
-import 'package:mytask/task_service.dart';
+import 'package:mytask/add&edit/detail_page.dart';
+import 'package:mytask/data/task_service.dart';
 import 'package:provider/provider.dart';
 
 class SearchTask extends StatefulWidget {
