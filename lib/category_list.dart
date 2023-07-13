@@ -41,8 +41,9 @@ class _CategoryTasksScreenState extends State<CategoryTasksScreen> {
         children: [
           Padding(
             padding: EdgeInsets.all(16.0),
-            child: Wrap(
-              alignment: WrapAlignment.spaceAround,
+            child: GridView.count(
+              shrinkWrap: true,
+              crossAxisCount: 4,
               children: [
                 for (int category in categories)
                   CategoryIcon(
