@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:mytask/data/task_service.dart';
 import '../etc/category_icon.dart';
 import 'add&edit/detail_page.dart';
+import 'add&edit/edit_page.dart';
 
 class CategoryTasksScreen extends StatefulWidget {
   @override
@@ -19,8 +20,10 @@ class _CategoryTasksScreenState extends State<CategoryTasksScreen> {
     super.initState();
     categories = taskService.getCategories();
     if (!categories.contains(selectedCategory)) {
-      selectedCategory = categories.isNotEmpty ? categories[0] : selectedCategory;
+      selectedCategory =
+          categories.isNotEmpty ? categories[0] : selectedCategory;
     }
+    setState(() {}); // 초기화된 selectedCategory로 화면을 다시 빌드하여 새로고침
   }
 
   @override
@@ -40,17 +43,34 @@ class _CategoryTasksScreenState extends State<CategoryTasksScreen> {
       body: Column(
         children: [
           Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(8.0),
             child: GridView.count(
               shrinkWrap: true,
               crossAxisCount: 4,
               children: [
                 for (int category in categories)
-                  CategoryIcon(
-                    category,
-                    selectedCategory,
-                    getCategoryIcon(category),
-                    changeIcon,
+                  GestureDetector(
+                    onTap: () {
+                      changeIcon(category);
+                    },
+                    child: Container(
+                      width: 20.0,
+                      height: 16.0,
+                      padding: EdgeInsets.all(1.0),
+                      decoration: BoxDecoration(
+                        color: category == selectedCategory
+                            ? Colors.grey
+                            : Colors.white,
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      child: Icon(
+                        getCategoryIcon(category),
+                        size: 20.0,
+                        color: category == selectedCategory
+                            ? Colors.white
+                            : Colors.black,
+                      ),
+                    ),
                   ),
               ],
             ),
@@ -64,14 +84,17 @@ class _CategoryTasksScreenState extends State<CategoryTasksScreen> {
                 return ListTile(
                   title: Text(task.content),
                   subtitle: Text(task.dueDate.toString()),
-                  onTap: () {
-                    Navigator.push(
+                  onTap: () async {
+                    await Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            DetailPage(index: taskService.taskList.indexOf(task)),
+                        builder: (context) => EditPage(
+                          index: taskService.taskList.indexOf(task),
+                        ),
                       ),
                     );
+
+                    setState(() {});
                   },
                 );
               },
