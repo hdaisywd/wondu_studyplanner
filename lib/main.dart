@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
+import 'package:mytask/calendar_page.dart';
 import 'package:mytask/etc/search_task.dart';
 import 'package:mytask/add&edit/add_page.dart';
 import 'package:provider/provider.dart';
@@ -94,7 +95,14 @@ class _HomePageState extends State<HomePage> {
                   iconColor: Colors.purple,
                   focusColor: Colors.purple,
                   title: Text('캘린더'),
-                  onTap: () {},
+                  onTap: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => CalendarPage(),
+                      ),
+                    );
+                  },
                   trailing: Icon(Icons.navigate_next),
                 ),
                 ListTile(
@@ -153,7 +161,8 @@ class _HomePageState extends State<HomePage> {
                             SlidableAction(
                               //onPressed:
                               onPressed: (context) {
-                                taskService.updatePinTask(index: index);
+                                taskService.updatePinTask(
+                                    index: taskList.indexOf(task));
                               },
                               backgroundColor: Color(0xFF21B7CA),
                               foregroundColor: Colors.white,
@@ -172,7 +181,8 @@ class _HomePageState extends State<HomePage> {
                                 autoClose: false,
                                 flex: 2,
                                 onPressed: (context) {
-                                  taskService.deleteTask(index: index);
+                                  taskService.deleteTask(
+                                      index: taskList.indexOf(task));
                                 },
                                 backgroundColor: Color(0xFFFE4A49),
                                 foregroundColor: Colors.white,
@@ -190,7 +200,8 @@ class _HomePageState extends State<HomePage> {
                               setState(() {
                                 {
                                   isChecked = value!;
-                                  taskService.updateCheckTask(index: index);
+                                  taskService.updateCheckTask(
+                                      index: taskList.indexOf(task));
                                 }
                               });
                             },
@@ -219,12 +230,13 @@ class _HomePageState extends State<HomePage> {
                               context,
                               MaterialPageRoute(
                                 builder: (_) => DetailPage(
-                                  index: index,
+                                  index: taskList.indexOf(task),
                                 ),
                               ),
                             );
                             if (task.content.isEmpty) {
-                              taskService.deleteTask(index: index);
+                              taskService.deleteTask(
+                                  index: taskList.indexOf(task));
                             }
                           },
                         ));
