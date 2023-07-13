@@ -31,10 +31,7 @@ class _CategoryTasksScreenState extends State<CategoryTasksScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Image.asset(
-          'images/wondu_appbar_image.png',
-          width: 150,
-        ),
+        title: Text('Calendar'),
         backgroundColor: Color.fromARGB(159, 255, 158, 190),
         centerTitle: true,
       ),
@@ -92,7 +89,7 @@ class _CategoryTasksScreenState extends State<CategoryTasksScreen> {
                       ),
                     );
 
-                    setState(() {});
+                    setState(() {}); // 수정 후 화면 업데이트
                   },
                 );
               },

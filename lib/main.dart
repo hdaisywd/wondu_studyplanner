@@ -46,7 +46,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// 홈 페이지
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
