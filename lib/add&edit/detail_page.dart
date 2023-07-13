@@ -185,6 +185,7 @@ class _DetailPageState extends State<DetailPage> {
                     selectedIconNum: selectedIconNum,
                     taskService: taskService,
                     index: widget.index,
+                    onChanged: (val) => selectedIconNum = val,
                   ),
                 ),
               ],

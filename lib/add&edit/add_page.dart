@@ -27,13 +27,7 @@ class _AddPageState extends State<AddPage> {
 
   /* 선택된 아이콘 번호 변수 */
   var selectedIconNum = 7;
-
-  /* 제목 변수 */
-  var title = '';
-  /* 날짜 변수 */
-  var dueDate = DateTime.now();
-  /* 내용 변수 */
-  var detail = '';
+  DateTime selectedDateTime = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -83,13 +77,13 @@ class _AddPageState extends State<AddPage> {
                   /// 제목과 날짜 필수 처리
                   Navigator.pop(context);
                   taskService.createTask(
-                      content: title,
-                      dueDate: dueDate,
-                      detail: detail,
+                      content: contentController.text,
+                      dueDate: selectedDateTime,
+                      detail: addController.text,
                       category: selectedIconNum);
-                  debugPrint(title);
-                  debugPrint(dueDate.toString());
-                  debugPrint(detail);
+                  debugPrint(contentController.text);
+                  debugPrint((dateInput.value).toString());
+                  debugPrint(addController.text);
                   debugPrint(selectedIconNum.toString());
                 }
               },
@@ -112,20 +106,11 @@ class _AddPageState extends State<AddPage> {
                     labelText: "Task",
                   ),
                   onChanged: (value) {
-                    setState(() {
-                      title = contentController.text;
-                    });
-
                     /// title 값 전달
                     // taskService.updateTask(index: widget.index, content: value);
                   },
                   // fix: 완료 누르면 타이틀 바뀌게 -> xx
                   onEditingComplete: () {
-                    setState(
-                      () {
-                        title = contentController.text;
-                      },
-                    );
                     FocusScope.of(context).unfocus();
                   },
                 ),
@@ -148,17 +133,13 @@ class _AddPageState extends State<AddPage> {
 
                     if (pickedDate != null) {
                       // print(pickedDate);
+                      selectedDateTime = pickedDate;
                       String formattedDate =
                           DateFormat('yyyy-MM-dd').format(pickedDate);
                       debugPrint(formattedDate);
-                      setState(
-                        () {
-                          dueDate = pickedDate; // dueDate 값 전달(DateTime)
-                          dateInput.text =
-                              formattedDate; // dateinput text 변경(String)
-                          // fix: task.dueDate = pickedDate;
-                        },
-                      );
+                      dateInput.text =
+                          formattedDate; // dateinput text 변경(String)
+                      // fix: task.dueDate = pickedDate;
                     } else {}
                     // fix: onChanged 추가
                   },
@@ -176,10 +157,6 @@ class _AddPageState extends State<AddPage> {
                   minLines: 1,
                   maxLines: 8,
                   onChanged: (value) {
-                    setState(() {
-                      detail = value;
-                    });
-
                     /// description 값 전달
                     // fix: 상세 내용으로 변경
                     // taskService.updateDetail(
@@ -193,6 +170,7 @@ class _AddPageState extends State<AddPage> {
                     selectedIconNum: selectedIconNum,
                     taskService: taskService,
                     index: widget.index,
+                    onChanged: (val) => selectedIconNum = val,
                   ),
                 ),
               ],
