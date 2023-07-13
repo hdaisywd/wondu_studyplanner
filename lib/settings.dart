@@ -46,38 +46,47 @@ class _SettingsPageState extends State<SettingsPage> {
           children: [
             Text(
               '이름',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
+            SizedBox(height: 4),
             TextField(
               controller: _nameController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
+                isDense: true,
               ),
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 12),
             Text(
               '이메일',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
+            SizedBox(height: 4),
             TextField(
               controller: _emailController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
+                isDense: true,
               ),
             ),
             SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                String newName = _nameController.text;
-                String newEmail = _emailController.text;
-                // 이름과 이메일을 업데이트하는 로직 추가
+            SizedBox(
+              width: double.infinity,
+              height: 32,
+              child: ElevatedButton(
+                onPressed: () {
+                  String newName = _nameController.text;
+                  String newEmail = _emailController.text;
+                  // 이름과 이메일을 업데이트하는 로직 추가
 
-                // 업데이트가 완료되면 이전 화면으로 돌아감
-                Navigator.pop(context);
-              },
-              child: Text('저장'),
+                  // 업데이트가 완료되면 이전 화면으로 돌아감
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  '저장',
+                  style: TextStyle(fontSize: 12),
+                ),
+              ),
             ),
           ],
         ),
