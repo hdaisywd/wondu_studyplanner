@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:mytask/data/task_service.dart';
 import '../etc/category_icon.dart';
+import 'add&edit/detail_page.dart';
+import 'etc/search_task.dart';
 
 class CategoryTasksScreen extends StatefulWidget {
   @override
@@ -21,10 +24,16 @@ class _CategoryTasksScreenState extends State<CategoryTasksScreen> {
   @override
   Widget build(BuildContext context) {
     Map<int, List<Task>> categorizedTasks = taskService.getTasksByCategory();
+    List<Task> selectedTasks = categorizedTasks[selectedCategory] ?? [];
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Category Tasks'),
+        title: Image.asset(
+          'images/wondu_appbar_image.png',
+          width: 150,
+        ),
+        backgroundColor: Color.fromARGB(159, 255, 158, 190),
+        centerTitle: true,
       ),
       body: Column(
         children: [
@@ -36,25 +45,25 @@ class _CategoryTasksScreenState extends State<CategoryTasksScreen> {
                 CategoryIcon(
                   0,
                   selectedCategory,
-                  Icons.book,
+                  CupertinoIcons.book,
                   changeIcon,
                 ),
                 CategoryIcon(
                   1,
                   selectedCategory,
-                  Icons.book,
+                  CupertinoIcons.building_2_fill,
                   changeIcon,
                 ),
                 CategoryIcon(
                   2,
                   selectedCategory,
-                  Icons.sports_basketball,
+                  CupertinoIcons.sportscourt,
                   changeIcon,
                 ),
                 CategoryIcon(
                   3,
                   selectedCategory,
-                  Icons.games,
+                  CupertinoIcons.gamecontroller,
                   changeIcon,
                 ),
               ],
@@ -62,14 +71,21 @@ class _CategoryTasksScreenState extends State<CategoryTasksScreen> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: categorizedTasks[selectedCategory]?.length ?? 0,
+              itemCount: selectedTasks.length,
               itemBuilder: (context, index) {
-                Task task = categorizedTasks[selectedCategory]![index];
+                Task task = selectedTasks[index];
 
                 return ListTile(
                   title: Text(task.content),
                   subtitle: Text(task.dueDate.toString()),
-                  // Add more details or customization as needed
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailPage(index: taskService.taskList.indexOf(task)), // 수정된 부분
+                      ),
+                    );
+                  },
                 );
               },
             ),
