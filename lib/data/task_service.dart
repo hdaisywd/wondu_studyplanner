@@ -71,6 +71,18 @@ class TaskService extends ChangeNotifier {
     return categorizedTasks;
   }
 
+  List<int> getCategories() {
+    List<int> categories = [];
+
+    for (Task task in taskList) {
+      if (!categories.contains(task.category)) {
+        categories.add(task.category);
+      }
+    }
+
+    return categories;
+  }
+
   List<Task> taskList = [
     Task(
         content: '장보기 목록: 사과, 양파',
