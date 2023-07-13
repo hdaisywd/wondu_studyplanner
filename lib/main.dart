@@ -220,7 +220,7 @@ class _HomePageState extends State<HomePage> {
                                 autoClose: false,
                                 flex: 2,
                                 onPressed: (context) {
-                                  taskService.deleteTask(
+                                  taskService.updateDeleteTask(
                                       index: taskList.indexOf(task));
                                 },
                                 backgroundColor: Color(0xFFFE4A49),

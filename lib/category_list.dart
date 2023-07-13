@@ -31,7 +31,7 @@ class _CategoryTasksScreenState extends State<CategoryTasksScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Calendar'),
+        title: Text('Category'),
         backgroundColor: Color.fromARGB(159, 255, 158, 190),
         centerTitle: true,
       ),

@@ -25,74 +25,11 @@ class _TrashCanPageState extends State<TrashCanPage> {
     return Consumer<TaskService>(
       builder: (context, taskService, child) {
         // taskService로 부터 taskList 가져오기
-        List<Task> taskList =
+        List<Task> taskList = taskService.taskList;
+        List<Task> deleteList =
             taskService.taskList.where((e) => e.isDeleted == true).toList();
 
         return Scaffold(
-          drawer: Drawer(
-            child: ListView(
-              children: [
-                UserAccountsDrawerHeader(
-                  currentAccountPicture: CircleAvatar(
-                    backgroundImage: AssetImage('images/wondu.jpeg'),
-                  ),
-                  accountName: Text('원두네'),
-                  accountEmail: Text('wondu@gmail.com'),
-                  decoration: BoxDecoration(
-                    color: Color.fromARGB(159, 242, 170, 255),
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(10.0),
-                      bottomRight: Radius.circular(10.0),
-                    ),
-                  ),
-                ),
-                ListTile(
-                  leading: Icon(Icons.home),
-                  iconColor: Colors.purple,
-                  focusColor: Colors.purple,
-                  title: Text('홈'),
-                  onTap: () async {
-                    // 아이템 클릭시
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => HomePage(),
-                      ),
-                    );
-                  },
-                  trailing: Icon(Icons.navigate_next),
-                ),
-                ListTile(
-                  leading: Icon(Icons.category),
-                  iconColor: Colors.purple,
-                  focusColor: Colors.purple,
-                  title: Text('카테고리'),
-                  onTap: () {},
-                  trailing: Icon(Icons.navigate_next),
-                ),
-                ListTile(
-                  leading: Icon(
-                    Icons.restore_from_trash,
-                  ),
-                  iconColor: Colors.purple,
-                  focusColor: Color.fromARGB(159, 242, 170, 255),
-                  title: Text('휴지통'),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  trailing: Icon(Icons.navigate_next),
-                ),
-                ListTile(
-                  leading: Icon(Icons.settings),
-                  iconColor: Colors.purple,
-                  focusColor: Colors.purple,
-                  title: Text('설정'),
-                  onTap: () {},
-                  trailing: Icon(Icons.navigate_next),
-                ),
-              ],
-            ),
-          ),
           appBar: AppBar(
             title: Text('휴지통'),
             // title: Image.asset(
@@ -108,12 +45,12 @@ class _TrashCanPageState extends State<TrashCanPage> {
                   icon: Icon(Icons.search)),
             ],
           ),
-          body: taskList.isEmpty
+          body: deleteList.isEmpty
               ? Center(child: Text("휴지통이 비어 있습니다."))
               : ListView.builder(
-                  itemCount: taskList.length, // taskList 개수
+                  itemCount: deleteList.length, // taskList 개수
                   itemBuilder: (context, index) {
-                    Task task = taskList[index]; // index에 해당하는 task 가져오기
+                    Task task = deleteList[index]; // index에 해당하는 task 가져오기
                     return ListTile(
                       // 메모 내용 (최대 3줄까지만 보여주도록)
                       leading: Icon(Icons.task),
@@ -147,7 +84,8 @@ class _TrashCanPageState extends State<TrashCanPage> {
                                   ),
                                   TextButton(
                                     onPressed: () {
-                                      taskService.unDeleteTask(index: index);
+                                      taskService.unDeleteTask(
+                                          index: taskList.indexOf(task));
                                       Navigator.pop(context);
                                     },
                                     child: Text("복구"),
@@ -155,7 +93,8 @@ class _TrashCanPageState extends State<TrashCanPage> {
                                   // 확인 버튼
                                   TextButton(
                                     onPressed: () {
-                                      taskService.deleteTask(index: index);
+                                      taskService.deleteTask(
+                                          index: taskList.indexOf(task));
                                       Navigator.pop(context); // 팝업 닫기
                                     },
                                     child: Text(
@@ -171,7 +110,7 @@ class _TrashCanPageState extends State<TrashCanPage> {
 
                         showConfirmDeleteDialog(context, taskService);
                         if (task.content.isEmpty) {
-                          taskService.deleteTask(index: index);
+                          taskService.deleteTask(index: taskList.indexOf(task));
                         }
                       },
                     );
