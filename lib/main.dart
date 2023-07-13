@@ -55,6 +55,7 @@ class _HomePageState extends State<HomePage> {
       builder: (context, taskService, child) {
         // taskService로 부터 taskList 가져오기
         List<Task> taskList = taskService.taskList;
+        bool isChecked = false;
 
         return Scaffold(
           drawer: Drawer(
@@ -131,6 +132,7 @@ class _HomePageState extends State<HomePage> {
                   itemCount: taskList.length, // taskList 개수 만큼 보여주기
                   itemBuilder: (context, index) {
                     Task task = taskList[index]; // index에 해당하는 task 가져오기
+                    isChecked = task.isChecked;
                     return Slidable(
                         key: UniqueKey(), // 트리에서 삭제 문제 해결
                         startActionPane: ActionPane(
@@ -167,9 +169,22 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                         child: ListTile(
-                          leading: task.isPinned
-                              ? Icon(CupertinoIcons.pin_fill)
-                              : null,
+                          // leading: task.isPinned
+                          //     ? Icon(CupertinoIcons.pin_fill)
+                          //     : null,
+                          leading: Checkbox(
+                            value: isChecked,
+                            onChanged: (value) {
+                              setState(() {
+                                {
+                                  isChecked = value!;
+                                  taskService.updateCheckTask(index: index);
+                                }
+                              });
+                            },
+                            activeColor: Colors.grey,
+                            checkColor: Colors.black,
+                          ),
                           // 메모 내용 (최대 3줄까지만 보여주도록)
                           title: Text(
                             task.content,

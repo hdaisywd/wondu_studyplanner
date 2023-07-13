@@ -13,6 +13,7 @@ class Task {
     this.category = 7,
     this.isPinned = false,
     this.updatedAt,
+    this.isChecked = false,
   });
 
   String content;
@@ -21,6 +22,7 @@ class Task {
   int category;
   bool isPinned;
   DateTime? updatedAt;
+  bool isChecked;
 
   Map toJson() {
     return {
@@ -30,6 +32,7 @@ class Task {
       'category': category,
       'isPinned': isPinned,
       'updatedAt': updatedAt?.toIso8601String(),
+      'isChecked': isChecked,
     };
   }
 
@@ -42,6 +45,7 @@ class Task {
       isPinned: json['isPinned'] ?? false,
       updatedAt:
           json['updatedAt'] == null ? null : DateTime.parse(json['updatedAt']),
+      isChecked: json['isChecked'] ?? false,
     );
   }
 }
@@ -71,6 +75,7 @@ class TaskService extends ChangeNotifier {
         detail: detail,
         category: category);
     taskList.add(task);
+    taskList.sort(((a, b) => a.dueDate.compareTo(b.dueDate)));
     notifyListeners();
     saveTaskList(); // Consumer<TaskService>의 builder 부분을 호출해서 화면 새로고침
   }
@@ -108,6 +113,13 @@ class TaskService extends ChangeNotifier {
       ...taskList.where((element) => element.isPinned),
       ...taskList.where((element) => !element.isPinned),
     ];
+    notifyListeners();
+    saveTaskList();
+  }
+
+  updateCheckTask({required int index}) {
+    Task task = taskList[index];
+    task.isChecked = !task.isChecked;
     notifyListeners();
     saveTaskList();
   }
