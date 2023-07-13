@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:mytask/view/detail_page.dart';
 import 'package:provider/provider.dart';
 
-import 'view/add_page.dart';
 import 'network/task_service.dart';
 
 class CalendarPage extends StatefulWidget {
