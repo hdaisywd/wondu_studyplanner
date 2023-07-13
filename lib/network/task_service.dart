@@ -34,6 +34,7 @@ class Task {
       'detail': detail,
       'category': category,
       'isPinned': isPinned,
+      'isDeleted': isDeleted,
       'updatedAt': updatedAt?.toIso8601String(),
       'isChecked': isChecked,
     };
@@ -67,7 +68,9 @@ class TaskService extends ChangeNotifier {
       if (!tasksByCategory.containsKey(task.category)) {
         tasksByCategory[task.category] = [];
       }
-      tasksByCategory[task.category]!.add(task);
+      if (task.isDeleted == false) {
+        tasksByCategory[task.category]!.add(task);
+      }
     }
 
     // Create new lists for each category and copy tasks to the new lists

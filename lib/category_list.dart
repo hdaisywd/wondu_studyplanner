@@ -6,6 +6,8 @@ import 'package:mytask/view/detail_page.dart';
 import 'view/edit_page.dart';
 
 class CategoryTasksScreen extends StatefulWidget {
+  const CategoryTasksScreen({super.key});
+
   @override
   _CategoryTasksScreenState createState() => _CategoryTasksScreenState();
 }
@@ -31,7 +33,7 @@ class _CategoryTasksScreenState extends State<CategoryTasksScreen> {
     Map<int, List<Task>> categorizedTasks = taskService.getTasksByCategory();
     List<Task> selectedTasks =
         categorizedTasks[selectedCategory] ?? []; // isDeleted가 false인 것만 받아오기
-    selectedTasks = selectedTasks.where((e) => e.isDeleted == false).toList();
+    //selectedTasks = selectedTasks.where((e) => e.isDeleted == false).toList();
 
     return Scaffold(
       appBar: AppBar(
