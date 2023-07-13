@@ -6,7 +6,7 @@ import 'package:mytask/view/detail_page.dart';
 import 'package:provider/provider.dart';
 
 import 'view/add_page.dart';
-import 'data/task_service.dart';
+import 'network/task_service.dart';
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});

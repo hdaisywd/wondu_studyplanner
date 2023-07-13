@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mytask/view/detail_page.dart';
 import 'package:provider/provider.dart';
 
-import 'data/task_service.dart';
+import 'network/task_service.dart';
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({
