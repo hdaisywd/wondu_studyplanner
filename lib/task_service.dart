@@ -1,4 +1,6 @@
 import 'dart:convert';
+// import 'dart:ffi';
+// import 'dart:js_interop'; -> Xcode 미지원 에러 발생
 
 import 'package:flutter/material.dart';
 
@@ -12,6 +14,7 @@ class Task {
     this.detail,
     this.category = 7,
     this.isPinned = false,
+    this.isDeleted = false,
     this.updatedAt,
   });
 
@@ -20,9 +23,10 @@ class Task {
   String? detail;
   int category;
   bool isPinned;
+  bool isDeleted;
   DateTime? updatedAt;
 
-  Map toJson() {
+  Map<String, dynamic> toJson() {
     return {
       'content': content,
       //'dueDate': dueDate.toIso8601String(),
@@ -30,6 +34,7 @@ class Task {
       'category': category,
       'isPinned': isPinned,
       'updatedAt': updatedAt?.toIso8601String(),
+      'isDeleted': isDeleted,
     };
   }
 
@@ -40,6 +45,7 @@ class Task {
       detail: json['detail'] ?? '',
       category: json['category'] ?? 7,
       isPinned: json['isPinned'] ?? false,
+      isDeleted: json['isDeleted'] ?? false,
       updatedAt:
           json['updatedAt'] == null ? null : DateTime.parse(json['updatedAt']),
     );
@@ -97,6 +103,17 @@ class TaskService extends ChangeNotifier {
     saveTaskList();
   }
 
+  updateDeleteTask({required int index}) {
+    Task task = taskList[index];
+    task.isDeleted = !task.isDeleted;
+    taskList = [
+      ...taskList.where((element) => element.isDeleted),
+      ...taskList.where((element) => !element.isDeleted),
+    ];
+    notifyListeners();
+    saveTaskList();
+  }
+
   deleteTask({required int index}) {
     taskList.removeAt(index);
     notifyListeners();
@@ -117,11 +134,10 @@ class TaskService extends ChangeNotifier {
     String? jsonString = prefs.getString('taskList');
     // '[{"content": "1"}, {"content": "2"}]'
 
-    if (jsonString == null) return; // null 이면 로드하지 않음
+    // content가 null이거나 삭제한 항목이면 로드하지 않음
+    if (jsonString == null) return;
 
     List taskJsonList = jsonDecode(jsonString);
-    // [{"content": "1"}, {"content": "2"}]
-
     taskList = taskJsonList.map((json) => Task.fromJson(json)).toList();
   }
 }
