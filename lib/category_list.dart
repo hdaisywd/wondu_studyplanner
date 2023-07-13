@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:mytask/data/task_service.dart';
 import '../etc/category_icon.dart';
 import 'add&edit/detail_page.dart';
-import 'etc/search_task.dart';
 
 class CategoryTasksScreen extends StatefulWidget {
   @override
@@ -19,6 +18,9 @@ class _CategoryTasksScreenState extends State<CategoryTasksScreen> {
   void initState() {
     super.initState();
     categories = taskService.getCategories();
+    if (!categories.contains(selectedCategory)) {
+      selectedCategory = categories.isNotEmpty ? categories[0] : selectedCategory;
+    }
   }
 
   @override
@@ -39,33 +41,16 @@ class _CategoryTasksScreenState extends State<CategoryTasksScreen> {
         children: [
           Padding(
             padding: EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+            child: Wrap(
+              alignment: WrapAlignment.spaceAround,
               children: [
-                CategoryIcon(
-                  0,
-                  selectedCategory,
-                  CupertinoIcons.book,
-                  changeIcon,
-                ),
-                CategoryIcon(
-                  1,
-                  selectedCategory,
-                  CupertinoIcons.building_2_fill,
-                  changeIcon,
-                ),
-                CategoryIcon(
-                  2,
-                  selectedCategory,
-                  CupertinoIcons.sportscourt,
-                  changeIcon,
-                ),
-                CategoryIcon(
-                  3,
-                  selectedCategory,
-                  CupertinoIcons.gamecontroller,
-                  changeIcon,
-                ),
+                for (int category in categories)
+                  CategoryIcon(
+                    category,
+                    selectedCategory,
+                    getCategoryIcon(category),
+                    changeIcon,
+                  ),
               ],
             ),
           ),
@@ -82,7 +67,8 @@ class _CategoryTasksScreenState extends State<CategoryTasksScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => DetailPage(index: taskService.taskList.indexOf(task)), // 수정된 부분
+                        builder: (context) =>
+                            DetailPage(index: taskService.taskList.indexOf(task)),
                       ),
                     );
                   },
@@ -93,6 +79,27 @@ class _CategoryTasksScreenState extends State<CategoryTasksScreen> {
         ],
       ),
     );
+  }
+
+  IconData getCategoryIcon(int category) {
+    switch (category) {
+      case 0:
+        return CupertinoIcons.book;
+      case 1:
+        return CupertinoIcons.building_2_fill;
+      case 2:
+        return CupertinoIcons.sportscourt;
+      case 3:
+        return CupertinoIcons.gamecontroller;
+      case 4:
+        return CupertinoIcons.cart;
+      case 5:
+        return CupertinoIcons.bus;
+      case 6:
+        return CupertinoIcons.bandage;
+      default:
+        return CupertinoIcons.square_favorites_alt;
+    }
   }
 
   void changeIcon(int num) {
