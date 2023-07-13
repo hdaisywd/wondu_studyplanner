@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class NewScreen extends StatelessWidget {
-  const NewScreen({Key? key});
+class CategoryHome extends StatelessWidget {
+  const CategoryHome({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,9 +15,7 @@ class NewScreen extends StatelessWidget {
           },
         ),
       ),
-      body: Container(
-        // 새로운 화면의 내용
-      ),
+      body: null,
     );
   }
 }

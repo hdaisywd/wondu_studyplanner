@@ -7,7 +7,7 @@ import 'package:mytask/add&edit/add_page.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'new_screen.dart';
+import 'category_list.dart';
 import 'add&edit/detail_page.dart';
 import 'data/task_service.dart';
 
@@ -93,7 +93,7 @@ class _HomePageState extends State<HomePage> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => NewScreen()),
+                      MaterialPageRoute(builder: (context) => CategoryList()),
                     );
                   },
                   trailing: Icon(Icons.navigate_next),
