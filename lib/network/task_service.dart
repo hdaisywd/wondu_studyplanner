@@ -6,15 +6,14 @@ import '../main.dart';
 
 // Task 데이터의 형식을 정해줍니다. 추후 isPinned, updatedAt 등의 정보도 저장할 수 있습니다.
 class Task {
-  Task({
-    required this.content,
-    required this.dueDate,
-    this.detail,
-    this.category = 7,
-    this.isPinned = false,
-    this.updatedAt,
-    this.isChecked = false,
-  });
+  Task(
+      {required this.content,
+      required this.dueDate,
+      this.detail,
+      this.category = 7,
+      this.isPinned = false,
+      this.updatedAt,
+      this.isChecked = false});
 
   String content;
   DateTime dueDate;
@@ -39,7 +38,7 @@ class Task {
   factory Task.fromJson(json) {
     return Task(
       content: json['content'],
-      dueDate: DateTime.parse(json['dueDate'] ?? DateTime.parse("20230101")),
+      dueDate: DateTime.parse(json['dueDate'] ?? DateTime(2020, 1, 1)),
       detail: json['detail'] ?? '',
       category: json['category'] ?? 7,
       isPinned: json['isPinned'] ?? false,
@@ -76,6 +75,7 @@ class TaskService extends ChangeNotifier {
         category: category);
     taskList.add(task);
     taskList.sort(((a, b) => a.dueDate.compareTo(b.dueDate)));
+
     notifyListeners();
     saveTaskList(); // Consumer<TaskService>의 builder 부분을 호출해서 화면 새로고침
   }
@@ -106,6 +106,13 @@ class TaskService extends ChangeNotifier {
     saveTaskList();
   }
 
+  updateCheckTask({required int index}) {
+    Task task = taskList[index];
+    task.isChecked = !task.isChecked;
+    notifyListeners();
+    saveTaskList();
+  }
+
   updatePinTask({required int index}) {
     Task task = taskList[index];
     task.isPinned = !task.isPinned;
@@ -113,13 +120,6 @@ class TaskService extends ChangeNotifier {
       ...taskList.where((element) => element.isPinned),
       ...taskList.where((element) => !element.isPinned),
     ];
-    notifyListeners();
-    saveTaskList();
-  }
-
-  updateCheckTask({required int index}) {
-    Task task = taskList[index];
-    task.isChecked = !task.isChecked;
     notifyListeners();
     saveTaskList();
   }

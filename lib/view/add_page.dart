@@ -2,10 +2,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mytask/etc/show_category.dart';
+import 'package:mytask/category/show_category.dart';
 import 'package:provider/provider.dart';
 
-import '../data/task_service.dart';
+import '../network/task_service.dart';
 
 class AddPage extends StatefulWidget {
   const AddPage({super.key, required this.index});
@@ -28,6 +28,10 @@ class _AddPageState extends State<AddPage> {
   /* 선택된 아이콘 번호 변수 */
   var selectedIconNum = 7;
   DateTime selectedDateTime = DateTime.now();
+
+  /* valiation check */
+  bool contentValidate = false;
+  bool dueDateValidate = false;
 
   @override
   Widget build(BuildContext context) {
@@ -85,6 +89,15 @@ class _AddPageState extends State<AddPage> {
                   debugPrint((dateInput.value).toString());
                   debugPrint(addController.text);
                   debugPrint(selectedIconNum.toString());
+                } else {
+                  setState(() {
+                    if (contentController.text == "") {
+                      contentValidate = true;
+                    }
+                    if (dateInput.text == "") {
+                      dueDateValidate = true;
+                    }
+                  });
                 }
               },
               style: TextButton.styleFrom(foregroundColor: Colors.white),
@@ -102,10 +115,18 @@ class _AddPageState extends State<AddPage> {
                     ..selection = TextSelection.fromPosition(
                         TextPosition(offset: contentController.text.length)),
                   decoration: InputDecoration(
-                    icon: Icon(CupertinoIcons.paw),
-                    labelText: "Task",
-                  ),
+                      icon: Icon(CupertinoIcons.paw),
+                      labelText: "Task",
+                      errorText: contentValidate
+                          ? 'please fill in the textfield'
+                          : null),
                   onChanged: (value) {
+                    setState(() {
+                      contentController.text.isEmpty
+                          ? contentValidate = true
+                          : contentValidate = false;
+                    });
+
                     /// title 값 전달
                     // taskService.updateTask(index: widget.index, content: value);
                   },
@@ -118,9 +139,11 @@ class _AddPageState extends State<AddPage> {
                 TextField(
                   controller: dateInput,
                   decoration: InputDecoration(
-                    icon: Icon(Icons.calendar_today),
-                    labelText: "Due Date",
-                  ),
+                      icon: Icon(Icons.calendar_today),
+                      labelText: "Due Date",
+                      errorText: dueDateValidate
+                          ? 'please fill in the textfield'
+                          : null),
                   readOnly: true,
                   onTap: () async {
                     DateTime? pickedDate = await showDatePicker(
@@ -141,6 +164,11 @@ class _AddPageState extends State<AddPage> {
                           formattedDate; // dateinput text 변경(String)
                       // fix: task.dueDate = pickedDate;
                     } else {}
+                    setState(() {
+                      dateInput.text.isEmpty
+                          ? dueDateValidate = true
+                          : dueDateValidate = false;
+                    });
                     // fix: onChanged 추가
                   },
                 ),
@@ -171,6 +199,7 @@ class _AddPageState extends State<AddPage> {
                     taskService: taskService,
                     index: widget.index,
                     onChanged: (val) => selectedIconNum = val,
+                    categoryIsEnabled: true,
                   ),
                 ),
               ],

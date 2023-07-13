@@ -2,13 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
-import 'package:mytask/etc/search_task.dart';
-import 'package:mytask/add&edit/add_page.dart';
+import 'package:mytask/search/search_task.dart';
+import 'package:mytask/view/add_page.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'add&edit/detail_page.dart';
-import 'data/task_service.dart';
+import 'view/detail_page.dart';
+import 'network/task_service.dart';
 
 late SharedPreferences prefs;
 
@@ -56,7 +56,6 @@ class _HomePageState extends State<HomePage> {
         // taskService로 부터 taskList 가져오기
         List<Task> taskList = taskService.taskList;
         bool isChecked = false;
-
         return Scaffold(
           drawer: Drawer(
             child: ListView(

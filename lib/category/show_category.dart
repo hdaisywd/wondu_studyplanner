@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:mytask/data/task_service.dart';
+import 'package:mytask/network/task_service.dart';
 
 import 'category_icon.dart';
 
@@ -10,11 +10,13 @@ class ShowCategory extends StatefulWidget {
     required this.taskService,
     required this.index,
     required this.onChanged,
+    required this.categoryIsEnabled,
   });
 
   final int selectedIconNum, index;
   final TaskService taskService;
   final void Function(int val) onChanged;
+  final bool categoryIsEnabled;
 
   @override
   State<ShowCategory> createState() => _ShowCategoryState();
@@ -23,6 +25,7 @@ class ShowCategory extends StatefulWidget {
 class _ShowCategoryState extends State<ShowCategory> {
   late int selectedIconNum, index;
   late final TaskService taskService;
+  late bool categoryIsEnabled;
 
   @override
   void initState() {
@@ -31,6 +34,7 @@ class _ShowCategoryState extends State<ShowCategory> {
       selectedIconNum = widget.selectedIconNum;
       index = widget.index;
       taskService = widget.taskService;
+      categoryIsEnabled = widget.categoryIsEnabled;
     });
   }
 
@@ -58,24 +62,28 @@ class _ShowCategoryState extends State<ShowCategory> {
               selectedIconNum,
               CupertinoIcons.book,
               changeIcon,
+              categoryIsEnabled,
             ),
             CategoryIcon(
               1,
               selectedIconNum,
               CupertinoIcons.building_2_fill,
               changeIcon,
+              categoryIsEnabled,
             ),
             CategoryIcon(
               2,
               selectedIconNum,
               CupertinoIcons.sportscourt,
               changeIcon,
+              categoryIsEnabled,
             ),
             CategoryIcon(
               3,
               selectedIconNum,
               CupertinoIcons.gamecontroller,
               changeIcon,
+              categoryIsEnabled,
             ),
           ],
         ),
@@ -89,24 +97,28 @@ class _ShowCategoryState extends State<ShowCategory> {
               selectedIconNum,
               CupertinoIcons.cart,
               changeIcon,
+              categoryIsEnabled,
             ),
             CategoryIcon(
               5,
               selectedIconNum,
               CupertinoIcons.bus,
               changeIcon,
+              categoryIsEnabled,
             ),
             CategoryIcon(
               6,
               selectedIconNum,
               CupertinoIcons.bandage,
               changeIcon,
+              categoryIsEnabled,
             ),
             CategoryIcon(
               7,
               selectedIconNum,
               CupertinoIcons.square_favorites_alt,
               changeIcon,
+              categoryIsEnabled,
             ),
           ],
         ),

@@ -5,12 +5,14 @@ class CategoryIcon extends StatelessWidget {
   final int selectedIconNum;
   final IconData mIcon;
   final Function changeIcon;
+  final bool categoryIsEnabled;
 
   const CategoryIcon(
     this.productNum,
     this.selectedIconNum,
     this.mIcon,
-    this.changeIcon, {
+    this.changeIcon,
+    this.categoryIsEnabled, {
     Key? key,
   }) : super(key: key);
 
@@ -27,9 +29,11 @@ class CategoryIcon extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
       ),
       child: IconButton(
-        onPressed: () {
-          changeIcon(productNum);
-        },
+        onPressed: categoryIsEnabled
+            ? () {
+                changeIcon(productNum);
+              }
+            : null,
         icon: Icon(
           mIcon,
           color: Colors.black,

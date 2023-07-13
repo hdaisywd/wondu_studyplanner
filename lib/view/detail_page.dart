@@ -2,10 +2,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mytask/etc/show_category.dart';
+import 'package:mytask/category/show_category.dart';
 import 'package:provider/provider.dart';
 
-import '../data/task_service.dart';
+import '../network/task_service.dart';
 
 class DetailPage extends StatefulWidget {
   const DetailPage({super.key, required this.index});
@@ -29,7 +29,12 @@ class _DetailPageState extends State<DetailPage> {
   int selectedIconNum = 7;
 
   var editButtonHidden = false;
+  var categoryIsEnabled = false;
   DateTime dueDate = DateTime.now();
+
+  /* valiation check */
+  bool contentValidate = false;
+  bool dueDateValidate = false;
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +42,8 @@ class _DetailPageState extends State<DetailPage> {
     Task task = taskService.taskList[widget.index];
 
     contentController.text = task.content;
-    // fix: 날짜 추가
-    //dateInput.text = ??;
+    dateInput.text = DateFormat('yyyy-MM-dd').format(task.dueDate);
+
     detailController.text = task.detail ?? '';
     selectedIconNum = task.category;
 
@@ -74,6 +79,7 @@ class _DetailPageState extends State<DetailPage> {
                     onPressed: () {
                       setState(() {
                         editButtonHidden = true;
+                        categoryIsEnabled = true;
                       });
                     },
                     style: TextButton.styleFrom(
@@ -83,13 +89,24 @@ class _DetailPageState extends State<DetailPage> {
                   )
                 : TextButton(
                     onPressed: () {
-                      setState(() {
+                      if (contentController.text != "" &&
+                          dateInput.text != "") {
+                        taskService.updateTask(
+                            index: widget.index,
+                            content: contentController.text,
+                            dueDate: dueDate);
                         editButtonHidden = false;
-                      });
-                      taskService.updateTask(
-                          index: widget.index,
-                          content: contentController.text,
-                          dueDate: dueDate);
+                        categoryIsEnabled = false;
+                      } else {
+                        setState(() {
+                          if (contentController.text == "") {
+                            contentValidate = true;
+                          }
+                          if (dateInput.text == "") {
+                            dueDateValidate = true;
+                          }
+                        });
+                      }
                     },
                     style: TextButton.styleFrom(
                       foregroundColor: Colors.white,
@@ -109,12 +126,19 @@ class _DetailPageState extends State<DetailPage> {
                     ..selection = TextSelection.fromPosition(
                         TextPosition(offset: contentController.text.length)),
                   decoration: InputDecoration(
-                    icon: Icon(CupertinoIcons.paw),
-                    labelText: "Task",
-                  ),
+                      icon: Icon(CupertinoIcons.paw),
+                      labelText: "Task",
+                      errorText: contentValidate
+                          ? 'please fill in the textfield'
+                          : null),
                   onChanged: (value) {
                     taskService.updateTask(
                         index: widget.index, content: value, dueDate: dueDate);
+                    setState(() {
+                      contentController.text.isEmpty
+                          ? contentValidate = true
+                          : contentValidate = false;
+                    });
                   },
                   // fix: 완료 누르면 타이틀 바뀌게
                   onEditingComplete: () {
@@ -129,9 +153,11 @@ class _DetailPageState extends State<DetailPage> {
                   enabled: editButtonHidden,
                   controller: dateInput,
                   decoration: InputDecoration(
-                    icon: Icon(Icons.calendar_today),
-                    labelText: "Due Date",
-                  ),
+                      icon: Icon(Icons.calendar_today),
+                      labelText: "Due Date",
+                      errorText: dueDateValidate
+                          ? 'please fill in the textfield'
+                          : null),
                   readOnly: true,
                   onTap: () async {
                     DateTime? pickedDate = await showDatePicker(
@@ -156,6 +182,11 @@ class _DetailPageState extends State<DetailPage> {
                         },
                       );
                     } else {}
+                    setState(() {
+                      dateInput.text.isEmpty
+                          ? dueDateValidate = true
+                          : dueDateValidate = false;
+                    });
                     // fix: onChanged 추가
                   },
                 ),
@@ -186,6 +217,7 @@ class _DetailPageState extends State<DetailPage> {
                     taskService: taskService,
                     index: widget.index,
                     onChanged: (val) => selectedIconNum = val,
+                    categoryIsEnabled: categoryIsEnabled,
                   ),
                 ),
               ],
