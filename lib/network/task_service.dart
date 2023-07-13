@@ -124,6 +124,7 @@ class TaskService extends ChangeNotifier {
     task.content = content;
     task.dueDate = dueDate;
     task.updatedAt = DateTime.now();
+    taskList.sort(((a, b) => a.dueDate.compareTo(b.dueDate)));
     notifyListeners();
     saveTaskList();
   }
