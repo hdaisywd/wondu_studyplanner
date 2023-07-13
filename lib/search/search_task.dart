@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mytask/detail_page.dart';
-import 'package:mytask/task_service.dart';
+import 'package:mytask/view/detail_page.dart';
+import 'package:mytask/network/task_service.dart';
 import 'package:provider/provider.dart';
 
 class SearchTask extends StatefulWidget {
@@ -15,6 +15,7 @@ class SearchTask extends StatefulWidget {
 
 class _SearchTaskState extends State<SearchTask> {
   TextEditingController searchController = TextEditingController();
+  String search = '';
   @override
   Widget build(BuildContext context) {
     return Consumer<TaskService>(
@@ -52,7 +53,9 @@ class _SearchTaskState extends State<SearchTask> {
                 // },
                 onEditingComplete: () {
                   setState(
-                    () {},
+                    () {
+                      search = searchController.text;
+                    },
                   );
                   FocusScope.of(context).unfocus();
                 },
@@ -66,6 +69,9 @@ class _SearchTaskState extends State<SearchTask> {
                   itemCount: taskList.length, // taskList 개수 만큼 보여주기
                   itemBuilder: (context, index) {
                     Task task = taskList[index]; // index에 해당하는 task 가져오기
+                    if (search != '' && !task.content.contains(search)) {
+                      return SizedBox();
+                    }
                     return ListTile(
                       // 메모 고정 아이콘
                       leading: IconButton(

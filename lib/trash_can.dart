@@ -4,10 +4,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mytask/main.dart';
-import 'package:mytask/search_task.dart';
+import 'package:mytask/search/search_task.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'task_service.dart';
+import 'network/task_service.dart';
 
 late SharedPreferences prefs;
 

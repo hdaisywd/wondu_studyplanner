@@ -1,13 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:mytask/search_task.dart';
+import 'package:intl/intl.dart';
+import 'package:mytask/category_list.dart';
+import 'package:mytask/search/search_task.dart';
+import 'package:mytask/view/add_page.dart';
+import 'package:mytask/calendar_page.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'detail_page.dart';
-import 'task_service.dart';
+import 'view/detail_page.dart';
+import 'network/task_service.dart';
 import 'trash_can.dart';
+import 'view/detail_page.dart';
+import 'network/task_service.dart';
 
 late SharedPreferences prefs;
 
@@ -53,9 +59,12 @@ class _HomePageState extends State<HomePage> {
     return Consumer<TaskService>(
       builder: (context, taskService, child) {
         // taskService로 부터 taskList 가져오기
-        List<Task> taskList =
-            taskService.taskList.where((e) => e.isDeleted == false).toList();
-
+        List<Task> taskList = taskService.taskList;
+        bool isChecked = false;
+        DateTime now = DateTime.now();
+        List<Task> todayList = taskList
+            .where((e) => e.dueDate == DateTime(now.year, now.month, now.day))
+            .toList();
         return Scaffold(
           drawer: Drawer(
             child: ListView(
@@ -85,11 +94,32 @@ class _HomePageState extends State<HomePage> {
                   trailing: Icon(Icons.navigate_next),
                 ),
                 ListTile(
+                  leading: Icon(Icons.calendar_month),
+                  iconColor: Colors.purple,
+                  focusColor: Colors.purple,
+                  title: Text('캘린더'),
+                  onTap: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => CalendarPage(),
+                      ),
+                    );
+                  },
+                  trailing: Icon(Icons.navigate_next),
+                ),
+                ListTile(
                   leading: Icon(Icons.category),
                   iconColor: Colors.purple,
                   focusColor: Colors.purple,
                   title: Text('카테고리'),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CategoryTasksScreen()),
+                    );
+                  },
                   trailing: Icon(Icons.navigate_next),
                 ),
                 ListTile(
@@ -133,68 +163,103 @@ class _HomePageState extends State<HomePage> {
                   icon: Icon(Icons.search)),
             ],
           ),
-          body: taskList.isEmpty
+          body: todayList.isEmpty
               ? Center(child: Text("메모를 작성해 주세요"))
-              : ListView.builder(
-                  itemCount: taskList.length, // taskList 개수 만큼 보여주기
+              : ListView.separated(
+                  itemCount: todayList.length, // taskList 개수 만큼 보여주기
                   itemBuilder: (context, index) {
-                    Task task = taskList[index];
-
-                    // index에 해당하는 task 가져오기
+                    Task task = todayList[index]; // index에 해당하는 task 가져오기
+                    isChecked = task.isChecked;
                     return Slidable(
-                      key: const ValueKey(0),
-                      startActionPane: ActionPane(
-                        motion: const ScrollMotion(),
-                        children: [
-                          SlidableAction(
-                            onPressed: null,
-                            backgroundColor: Color(0xFF21B7CA),
-                            foregroundColor: Colors.white,
-                            icon: Icons.push_pin,
-                          ),
-                        ],
-                      ),
-                      endActionPane: ActionPane(
-                        // swipe from right to left
-                        motion: ScrollMotion(),
-                        dismissible: DismissiblePane(onDismissed: () {}),
-                        children: [
-                          SlidableAction(
-                              flex: 2,
-                              onPressed: null,
-                              backgroundColor: Color(0xFFFE4A49),
+                        key: UniqueKey(), // 트리에서 삭제 문제 해결
+                        startActionPane: ActionPane(
+                          motion: const ScrollMotion(),
+                          children: [
+                            SlidableAction(
+                              //onPressed:
+                              onPressed: (context) {
+                                taskService.updatePinTask(
+                                    index: taskList.indexOf(task));
+                              },
+                              backgroundColor: Color(0xFF21B7CA),
                               foregroundColor: Colors.white,
-                              icon: Icons.delete,
-                              label: 'Delete'),
-                        ],
-                      ),
-                      child: ListTile(
-                        // 메모 내용 (최대 3줄까지만 보여주도록)
-                        title: Text(
-                          task.content,
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        trailing: Text(task.updatedAt == null
-                            ? ""
-                            : task.updatedAt.toString().substring(0, 16)),
-
-                        onTap: () async {
-                          // 아이템 클릭시
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => DetailPage(
-                                index: index,
-                              ),
+                              icon: Icons.push_pin,
                             ),
-                          );
-                          if (task.content.isEmpty) {
-                            taskService.deleteTask(index: index);
-                          }
-                        },
-                      ),
-                    );
+                          ],
+                        ),
+                        endActionPane: ActionPane(
+                          // swipe from right to left
+                          motion: ScrollMotion(),
+                          // dismissible: DismissiblePane(onDismissed: () {
+                          //   taskService.deleteTask(index: index); // 리스트에서 밀어서 삭제
+                          // }),
+                          children: [
+                            SlidableAction(
+                                autoClose: false,
+                                flex: 2,
+                                onPressed: (context) {
+                                  taskService.deleteTask(
+                                      index: taskList.indexOf(task));
+                                },
+                                backgroundColor: Color(0xFFFE4A49),
+                                foregroundColor: Colors.white,
+                                icon: Icons.delete,
+                                label: 'Delete'),
+                          ],
+                        ),
+                        child: ListTile(
+                          // leading: task.isPinned
+                          //     ? Icon(CupertinoIcons.pin_fill)
+                          //     : null,
+                          leading: Checkbox(
+                            value: isChecked,
+                            onChanged: (value) {
+                              setState(() {
+                                {
+                                  isChecked = value!;
+                                  taskService.updateCheckTask(
+                                      index: taskList.indexOf(task));
+                                }
+                              });
+                            },
+                            activeColor: Colors.grey,
+                            checkColor: Colors.black,
+                          ),
+                          // 메모 내용 (최대 3줄까지만 보여주도록)
+                          title: Text(
+                            //if (task.is)
+                            task.content,
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          trailing: Icon(Icons.navigate_next),
+                          // trailing: Text(
+                          //     DateFormat('yyyy-MM-dd').format(task.dueDate)
+                          //     // task.dueDate.toString()
+                          //     // task.updatedAt == null
+                          //     //   ? ""
+                          //     //   : task.updatedAt.toString().substring(0, 16)
+                          //     ),
+
+                          onTap: () async {
+                            // 아이템 클릭시
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => DetailPage(
+                                  index: taskList.indexOf(task),
+                                ),
+                              ),
+                            );
+                            if (task.content.isEmpty) {
+                              taskService.deleteTask(
+                                  index: taskList.indexOf(task));
+                            }
+                          },
+                        ));
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return Divider(thickness: 1);
                   },
                 ),
           floatingActionButton: FloatingActionButton(
@@ -205,18 +270,19 @@ class _HomePageState extends State<HomePage> {
             ),
             onPressed: () async {
               // + 버튼 클릭시 메모 생성 및 수정 페이지로 이동
-              taskService.createTask(content: '');
+              // taskService.createTask(
+              //     content: '', dueDate: DateTime(2020, 2, 2));
               await Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => DetailPage(
+                  builder: (_) => AddPage(
                     index: taskService.taskList.length - 1,
                   ),
                 ),
               );
-              if (taskList.last.content.isEmpty) {
-                taskService.deleteTask(index: taskList.length - 1);
-              }
+              // if (taskList.last.content.isEmpty) {
+              //   taskService.deleteTask(index: taskList.length - 1);
+              // }
             },
           ),
         );
