@@ -4,6 +4,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:mytask/category_list.dart';
 import 'package:mytask/search/search_task.dart';
+import 'package:mytask/settings.dart';
 import 'package:mytask/view/add_page.dart';
 import 'package:mytask/calendar_page.dart';
 import 'package:provider/provider.dart';
@@ -132,7 +133,13 @@ class _HomePageState extends State<HomePage> {
                   iconColor: Colors.purple,
                   focusColor: Colors.purple,
                   title: Text('설정'),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SettingsPage()),
+                    );
+                  },
                   trailing: Icon(Icons.navigate_next),
                 ),
               ],

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:mytask/network/task_service.dart';
-import '../category/category_icon.dart';
-import 'view/detail_page.dart';
 import 'view/edit_page.dart';
 
 class CategoryTasksScreen extends StatefulWidget {
