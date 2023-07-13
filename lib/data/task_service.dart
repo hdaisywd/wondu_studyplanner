@@ -52,6 +52,25 @@ class TaskService extends ChangeNotifier {
     loadTaskList();
   }
 
+  Map<int, List<Task>> getTasksByCategory() {
+    Map<int, List<Task>> tasksByCategory = {};
+
+    for (Task task in taskList) {
+      if (!tasksByCategory.containsKey(task.category)) {
+        tasksByCategory[task.category] = [];
+      }
+      tasksByCategory[task.category]!.add(task);
+    }
+
+    // Create new lists for each category and copy tasks to the new lists
+    Map<int, List<Task>> categorizedTasks = {};
+    tasksByCategory.forEach((category, tasks) {
+      categorizedTasks[category] = List<Task>.from(tasks);
+    });
+
+    return categorizedTasks;
+  }
+
   List<Task> taskList = [
     Task(
         content: '장보기 목록: 사과, 양파',

@@ -93,7 +93,8 @@ class _HomePageState extends State<HomePage> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => CategoryList()),
+                      MaterialPageRoute(
+                          builder: (context) => CategoryTasksScreen()),
                     );
                   },
                   trailing: Icon(Icons.navigate_next),
