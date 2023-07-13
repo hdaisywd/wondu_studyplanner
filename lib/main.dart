@@ -29,7 +29,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,13 +45,23 @@ class MyApp extends StatelessWidget {
 
 // 홈 페이지
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  late String accountName;
+  late String accountEmail;
+
+  @override
+  void initState() {
+    super.initState();
+    accountName = prefs.getString('accountName') ?? '원두네';
+    accountEmail = prefs.getString('accountEmail') ?? 'wondu@gmail.com';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<TaskService>(
@@ -71,8 +81,8 @@ class _HomePageState extends State<HomePage> {
                   currentAccountPicture: CircleAvatar(
                     backgroundImage: AssetImage('images/wondu.jpeg'),
                   ),
-                  accountName: Text('원두네'),
-                  accountEmail: Text('wondu@gmail.com'),
+                  accountName: Text(accountName),
+                  accountEmail: Text(accountEmail),
                   decoration: BoxDecoration(
                     color: Color.fromARGB(159, 242, 170, 255),
                     borderRadius: BorderRadius.only(
@@ -137,7 +147,10 @@ class _HomePageState extends State<HomePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => SettingsPage()),
+                          builder: (context) => SettingsPage(
+                                accountName: '원두네',
+                                accountEmail: 'wondu@gmail.com',
+                              )),
                     );
                   },
                   trailing: Icon(Icons.navigate_next),
