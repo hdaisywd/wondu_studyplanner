@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'detail_page.dart';
+import 'new_screen.dart';
 import 'task_service.dart';
 
 late SharedPreferences prefs;
@@ -87,7 +88,12 @@ class _HomePageState extends State<HomePage> {
                   iconColor: Colors.purple,
                   focusColor: Colors.purple,
                   title: Text('카테고리'),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => NewScreen()),
+                    );
+                  },
                   trailing: Icon(Icons.navigate_next),
                 ),
                 ListTile(
@@ -161,8 +167,9 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                         child: ListTile(
-                          leading:
-                              task.isPinned ? Icon(CupertinoIcons.pin_fill) : null,
+                          leading: task.isPinned
+                              ? Icon(CupertinoIcons.pin_fill)
+                              : null,
                           // 메모 내용 (최대 3줄까지만 보여주도록)
                           title: Text(
                             task.content,
