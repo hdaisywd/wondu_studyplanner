@@ -37,6 +37,7 @@ class Task {
       'isDeleted': isDeleted,
       'updatedAt': updatedAt?.toIso8601String(),
       'isChecked': isChecked,
+      'isDeleted' : isDeleted,
     };
   }
 

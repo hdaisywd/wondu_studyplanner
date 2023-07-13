@@ -33,7 +33,11 @@ class _CategoryTasksScreenState extends State<CategoryTasksScreen> {
     Map<int, List<Task>> categorizedTasks = taskService.getTasksByCategory();
     List<Task> selectedTasks =
         categorizedTasks[selectedCategory] ?? []; // isDeleted가 false인 것만 받아오기
+<<<<<<< HEAD
     //selectedTasks = selectedTasks.where((e) => e.isDeleted == false).toList();
+=======
+    selectedTasks = selectedTasks.where((e) => e.isDeleted == false).toList();
+>>>>>>> fcd48177fc36d0805c77450fb8696f5b14b8315d
 
     return Scaffold(
       appBar: AppBar(

@@ -22,6 +22,8 @@ class _SearchTaskState extends State<SearchTask> {
     return Consumer<TaskService>(
       builder: (context, taskService, child) {
         List<Task> taskList = taskService.taskList;
+        List<Task> searchList =
+            taskList.where((e) => e.isDeleted == false).toList();
         bool isChecked = false;
         //List<Task> searchedList = taskService.searchedList ?? taskList;
 
@@ -65,24 +67,28 @@ class _SearchTaskState extends State<SearchTask> {
             ),
           ),
           // fix: 변경된 레이아웃으로 수정
-          body: taskList.isEmpty
+          body: searchList.isEmpty
               ? Center(child: Text("메모를 작성해 주세요"))
               : ListView.builder(
-                  itemCount: taskList.length, // taskList 개수 만큼 보여주기
+                  itemCount: searchList.length, // taskList 개수 만큼 보여주기
                   itemBuilder: (context, index) {
-                    Task task = taskList[index]; // index에 해당하는 task 가져오기
+                    Task task = searchList[index]; // index에 해당하는 task 가져오기
+                    isChecked = task.isChecked;
                     if (search != '' && !task.content.contains(search)) {
                       return SizedBox();
                     }
                     return ListTile(
-                      // 메모 고정 아이콘
+                      tileColor: isChecked
+                          ? const Color.fromARGB(255, 198, 198, 198)
+                          : null,
                       leading: Checkbox(
                         value: isChecked,
                         onChanged: (value) {
                           setState(() {
                             {
                               isChecked = value!;
-                              taskService.updateCheckTask(index: index);
+                              taskService.updateCheckTask(
+                                  index: taskList.indexOf(task));
                             }
                           });
                         },
@@ -104,12 +110,12 @@ class _SearchTaskState extends State<SearchTask> {
                           context,
                           MaterialPageRoute(
                             builder: (_) => DetailPage(
-                              index: index,
+                              index: taskList.indexOf(task),
                             ),
                           ),
                         );
                         if (task.content.isEmpty) {
-                          taskService.deleteTask(index: index);
+                          taskService.deleteTask(index: taskList.indexOf(task));
                         }
                       },
                     );
