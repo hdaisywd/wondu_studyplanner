@@ -211,6 +211,9 @@ class _HomePageState extends State<HomePage> {
                           // leading: task.isPinned
                           //     ? Icon(CupertinoIcons.pin_fill)
                           //     : null,
+                          tileColor: isChecked
+                              ? const Color.fromARGB(255, 198, 198, 198)
+                              : null,
                           leading: Checkbox(
                             value: isChecked,
                             onChanged: (value) {
