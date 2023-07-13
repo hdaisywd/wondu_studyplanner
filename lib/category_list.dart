@@ -27,7 +27,7 @@ class _CategoryTasksScreenState extends State<CategoryTasksScreen> {
   @override
   Widget build(BuildContext context) {
     Map<int, List<Task>> categorizedTasks = taskService.getTasksByCategory();
-    List<Task> selectedTasks = categorizedTasks[selectedCategory] ?? [];
+    List<Task> selectedTasks = categorizedTasks[selectedCategory] ?? []; // isDeleted가 false인 것만 받아오기 
 
     return Scaffold(
       appBar: AppBar(
