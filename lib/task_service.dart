@@ -114,6 +114,17 @@ class TaskService extends ChangeNotifier {
     saveTaskList();
   }
 
+  unDeleteTask({required int index}) {
+    Task task = taskList[index];
+    task.isDeleted = !task.isDeleted;
+    taskList = [
+      ...taskList.where((element) => element.isDeleted),
+      ...taskList.where((element) => !element.isDeleted),
+    ];
+    notifyListeners();
+    saveTaskList();
+  }
+
   deleteTask({required int index}) {
     taskList.removeAt(index);
     notifyListeners();
