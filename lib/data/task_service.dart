@@ -36,7 +36,7 @@ class Task {
   factory Task.fromJson(json) {
     return Task(
       content: json['content'],
-      dueDate: DateTime.parse(json['dueDate'] ?? DateTime(2020, 1, 1)),
+      dueDate: DateTime.parse(json['dueDate'] ?? DateTime.parse("20230101")),
       detail: json['detail'] ?? '',
       category: json['category'] ?? 7,
       isPinned: json['isPinned'] ?? false,
