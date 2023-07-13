@@ -60,7 +60,9 @@ class _HomePageState extends State<HomePage> {
         bool isChecked = false;
         DateTime now = DateTime.now();
         List<Task> todayList = taskList
-            .where((e) => e.dueDate == DateTime(now.year, now.month, now.day))
+            .where((e) =>
+                DateTime(e.dueDate.year, e.dueDate.month, e.dueDate.day) ==
+                DateTime(now.year, now.month, now.day))
             .toList();
         return Scaffold(
           drawer: Drawer(

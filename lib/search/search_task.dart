@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:mytask/view/detail_page.dart';
 import 'package:mytask/network/task_service.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +22,7 @@ class _SearchTaskState extends State<SearchTask> {
     return Consumer<TaskService>(
       builder: (context, taskService, child) {
         List<Task> taskList = taskService.taskList;
+        bool isChecked = false;
         //List<Task> searchedList = taskService.searchedList ?? taskList;
 
         return Scaffold(
@@ -74,13 +76,18 @@ class _SearchTaskState extends State<SearchTask> {
                     }
                     return ListTile(
                       // 메모 고정 아이콘
-                      leading: IconButton(
-                        icon: Icon(task.isPinned
-                            ? CupertinoIcons.pin_fill
-                            : CupertinoIcons.pin),
-                        onPressed: () {
-                          taskService.updatePinTask(index: index);
+                      leading: Checkbox(
+                        value: isChecked,
+                        onChanged: (value) {
+                          setState(() {
+                            {
+                              isChecked = value!;
+                              taskService.updateCheckTask(index: index);
+                            }
+                          });
                         },
+                        activeColor: Colors.grey,
+                        checkColor: Colors.black,
                       ),
                       // 메모 내용 (최대 3줄까지만 보여주도록)
                       title: Text(
@@ -88,9 +95,9 @@ class _SearchTaskState extends State<SearchTask> {
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      trailing: Text(task.updatedAt == null
-                          ? ""
-                          : task.updatedAt.toString().substring(0, 16)),
+                      trailing: Text(
+                        DateFormat('yy/MM/dd').format(task.dueDate),
+                      ),
                       onTap: () async {
                         // 아이템 클릭시
                         await Navigator.push(

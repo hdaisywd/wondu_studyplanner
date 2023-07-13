@@ -26,23 +26,15 @@ class _CalendarPageState extends State<CalendarPage> {
         DateTime now = DateTime.now();
         List<Task> notTodayList = taskList
             .where((e) =>
-                e.dueDate.isAfter(DateTime(now.year, now.month, now.day + 1)))
+                DateTime(e.dueDate.year, e.dueDate.month, e.dueDate.day)
+                    .isAfter(DateTime(now.year, now.month, now.day)))
             .toList();
 
         return Scaffold(
           appBar: AppBar(
-            title: Image.asset(
-              'images/wondu_appbar_image.png',
-              width: 150,
-            ),
+            title: Text('Calendar'),
             backgroundColor: Color.fromARGB(159, 255, 158, 190),
             centerTitle: true,
-            // actions: [
-            //   IconButton(
-            //       onPressed: () => Navigator.of(context)
-            //           .push(MaterialPageRoute(builder: (_) => SearchTask())),
-            //       icon: Icon(Icons.search)),
-            // ],
           ),
           body: notTodayList.isEmpty
               ? Center(child: Text("메모를 작성해 주세요"))
@@ -112,12 +104,8 @@ class _CalendarPageState extends State<CalendarPage> {
                             overflow: TextOverflow.ellipsis,
                           ),
                           trailing: Text(
-                              DateFormat('yyyy-MM-dd').format(task.dueDate)
-                              // task.dueDate.toString()
-                              // task.updatedAt == null
-                              //   ? ""
-                              //   : task.updatedAt.toString().substring(0, 16)
-                              ),
+                            DateFormat('yy/MM/dd').format(task.dueDate),
+                          ),
 
                           onTap: () async {
                             // 아이템 클릭시
