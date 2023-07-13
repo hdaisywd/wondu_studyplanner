@@ -42,6 +42,7 @@ class _CalendarPageState extends State<CalendarPage> {
                   itemCount: notTodayList.length, // taskList 개수 만큼 보여주기
                   itemBuilder: (context, index) {
                     Task task = notTodayList[index]; // index에 해당하는 task 가져오기
+                    isChecked = task.isChecked;
                     return Slidable(
                         key: UniqueKey(), // 트리에서 삭제 문제 해결
                         startActionPane: ActionPane(
@@ -80,6 +81,9 @@ class _CalendarPageState extends State<CalendarPage> {
                           ],
                         ),
                         child: ListTile(
+                          tileColor: isChecked
+                              ? const Color.fromARGB(255, 198, 198, 198)
+                              : null,
                           leading: Checkbox(
                             value: isChecked,
                             onChanged: (value) {
