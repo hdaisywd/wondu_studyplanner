@@ -116,14 +116,18 @@ class _TrashCanPageState extends State<TrashCanPage> {
                     Task task = taskList[index]; // index에 해당하는 task 가져오기
                     return ListTile(
                       // 메모 내용 (최대 3줄까지만 보여주도록)
+                      leading: Icon(Icons.task),
                       title: Text(
-                        task.content,
-                        maxLines: 3,
+                        "Task : ${task.content}",
+                        maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      trailing: Text(task.updatedAt == null
-                          ? ""
-                          : task.updatedAt.toString().substring(0, 16)),
+
+                      subtitle: task.updatedAt == null
+                          ? Text("Description : ${task.detail}")
+                          : Text(
+                              "Description : ${task.detail}\nDate : ${task.updatedAt.toString().substring(0, 16)}"),
+                      isThreeLine: true,
 
                       onTap: () async {
                         void showConfirmDeleteDialog(
