@@ -109,7 +109,13 @@ class _HomePageState extends State<HomePage> {
                   iconColor: Colors.purple,
                   focusColor: Colors.purple,
                   title: Text('카테고리'),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CategoryTasksScreen()),
+                    );
+                  },
                   trailing: Icon(Icons.navigate_next),
                 ),
                 ListTile(
