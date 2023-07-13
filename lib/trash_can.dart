@@ -147,6 +147,7 @@ class _TrashCanPageState extends State<TrashCanPage> {
                                   ),
                                   TextButton(
                                     onPressed: () {
+                                      taskService.unDeleteTask(index: index);
                                       Navigator.pop(context);
                                     },
                                     child: Text("복구"),
