@@ -82,9 +82,15 @@ class _SettingsPageState extends State<SettingsPage> {
                   // 업데이트가 완료되면 이전 화면으로 돌아감
                   Navigator.pop(context);
                 },
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.grey[200],
+                ),
                 child: Text(
                   '저장',
-                  style: TextStyle(fontSize: 12),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[800],
+                  ),
                 ),
               ),
             ),
