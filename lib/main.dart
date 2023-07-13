@@ -11,6 +11,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'view/detail_page.dart';
 import 'network/task_service.dart';
+import 'trash_can.dart';
+import 'view/detail_page.dart';
+import 'network/task_service.dart';
 
 late SharedPreferences prefs;
 
@@ -126,7 +129,15 @@ class _HomePageState extends State<HomePage> {
                   iconColor: Colors.purple,
                   focusColor: Colors.purple,
                   title: Text('휴지통'),
-                  onTap: () {},
+                  onTap: () async {
+                    // 아이템 클릭시
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => TrashCanPage(),
+                      ),
+                    );
+                  },
                   trailing: Icon(Icons.navigate_next),
                 ),
                 ListTile(
@@ -202,6 +213,9 @@ class _HomePageState extends State<HomePage> {
                           // leading: task.isPinned
                           //     ? Icon(CupertinoIcons.pin_fill)
                           //     : null,
+                          tileColor: isChecked
+                              ? const Color.fromARGB(255, 198, 198, 198)
+                              : null,
                           leading: Checkbox(
                             value: isChecked,
                             onChanged: (value) {
