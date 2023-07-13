@@ -23,6 +23,7 @@ class _ShowCategoryState extends State<ShowCategory> {
   void changeIcon(int num) {
     setState(() {
       widget.selectedIconNum = num;
+      debugPrint(widget.selectedIconNum.toString());
       widget.taskService.updateCategory(
           index: widget.index, category: widget.selectedIconNum);
     });

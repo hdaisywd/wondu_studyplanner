@@ -26,7 +26,14 @@ class _AddPageState extends State<AddPage> {
   TextEditingController addController = TextEditingController();
 
   /* 선택된 아이콘 번호 변수 */
-  int selectedIconNum = 7;
+  var selectedIconNum = 7;
+
+  /* 제목 변수 */
+  var title = '';
+  /* 날짜 변수 */
+  var dueDate = DateTime.now();
+  /* 내용 변수 */
+  var detail = '';
 
   @override
   Widget build(BuildContext context) {
@@ -38,13 +45,6 @@ class _AddPageState extends State<AddPage> {
     //dateInput.text = ??;
     // addController.text = task.detail ?? '';
     // selectedIconNum = task.category;
-
-    /* 제목 변수 */
-    var title = '';
-    /* 날짜 변수 */
-    DateTime dueDate = DateTime.now();
-    /* 내용 변수 */
-    var detail = '';
 
     return GestureDetector(
       onTap: () {
@@ -79,11 +79,18 @@ class _AddPageState extends State<AddPage> {
             TextButton(
               onPressed: () {
                 // save 버튼 클릭 시 -> task 항목 추가, 뷰 pop
-                if (title != "" && dueDate != DateTime.now()) {
+                if (contentController.text != "" && dateInput.text != "") {
                   /// 제목과 날짜 필수 처리
-                  taskService.createTask(
-                      content: title, dueDate: dueDate, detail: detail);
                   Navigator.pop(context);
+                  taskService.createTask(
+                      content: title,
+                      dueDate: dueDate,
+                      detail: detail,
+                      category: selectedIconNum);
+                  debugPrint(title);
+                  debugPrint(dueDate.toString());
+                  debugPrint(detail);
+                  debugPrint(selectedIconNum.toString());
                 }
               },
               style: TextButton.styleFrom(foregroundColor: Colors.white),
@@ -105,7 +112,9 @@ class _AddPageState extends State<AddPage> {
                     labelText: "Task",
                   ),
                   onChanged: (value) {
-                    title = value;
+                    setState(() {
+                      title = contentController.text;
+                    });
 
                     /// title 값 전달
                     // taskService.updateTask(index: widget.index, content: value);
@@ -113,7 +122,9 @@ class _AddPageState extends State<AddPage> {
                   // fix: 완료 누르면 타이틀 바뀌게 -> xx
                   onEditingComplete: () {
                     setState(
-                      () {},
+                      () {
+                        title = contentController.text;
+                      },
                     );
                     FocusScope.of(context).unfocus();
                   },
@@ -165,7 +176,9 @@ class _AddPageState extends State<AddPage> {
                   minLines: 1,
                   maxLines: 8,
                   onChanged: (value) {
-                    detail = value;
+                    setState(() {
+                      detail = value;
+                    });
 
                     /// description 값 전달
                     // fix: 상세 내용으로 변경

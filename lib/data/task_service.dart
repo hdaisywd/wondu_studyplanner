@@ -25,7 +25,7 @@ class Task {
   Map toJson() {
     return {
       'content': content,
-      'dueDate': dueDate,
+      'dueDate': dueDate.toIso8601String(),
       'detail': detail,
       'category': category,
       'isPinned': isPinned,
@@ -60,12 +60,16 @@ class TaskService extends ChangeNotifier {
   ];
 
   createTask(
-      {required String content, required DateTime dueDate, String? detail}) {
+      {required String content,
+      required DateTime dueDate,
+      String? detail,
+      required int category}) {
     Task task = Task(
         content: content,
         updatedAt: DateTime.now(),
         dueDate: dueDate,
-        detail: detail);
+        detail: detail,
+        category: category);
     taskList.add(task);
     notifyListeners();
     saveTaskList(); // Consumer<TaskService>의 builder 부분을 호출해서 화면 새로고침
