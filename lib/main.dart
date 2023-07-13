@@ -251,12 +251,27 @@ class _HomePageState extends State<HomePage> {
                             checkColor: Colors.black,
                           ),
                           // 메모 내용 (최대 3줄까지만 보여주도록)
-                          title: Text(
-                            //if (task.is)
-                            task.content,
-                            maxLines: 3,
-                            overflow: TextOverflow.ellipsis,
+                          title: RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                    text: task.content,
+                                    style: TextStyle(color: Colors.black)),
+                                if (task.isPinned)
+                                  WidgetSpan(
+                                    child:
+                                        Icon(CupertinoIcons.pin_fill, size: 14),
+                                  ),
+                              ],
+                            ),
                           ),
+                          // Text(
+                          //   //if (task.is)
+                          //   task.content,
+                          //   maxLines: 3,
+                          //   overflow: TextOverflow.ellipsis,
+                          // ),
+
                           trailing: Icon(Icons.navigate_next),
                           // trailing: Text(
                           //     DateFormat('yyyy-MM-dd').format(task.dueDate)

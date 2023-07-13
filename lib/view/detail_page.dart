@@ -95,8 +95,12 @@ class _DetailPageState extends State<DetailPage> {
                             index: widget.index,
                             content: contentController.text,
                             dueDate: dueDate);
-                        editButtonHidden = false;
-                        categoryIsEnabled = false;
+                        debugPrint(task.content);
+                        debugPrint(task.dueDate.toString());
+                        setState(() {
+                          editButtonHidden = false;
+                          categoryIsEnabled = false;
+                        });
                       } else {
                         setState(() {
                           if (contentController.text == "") {

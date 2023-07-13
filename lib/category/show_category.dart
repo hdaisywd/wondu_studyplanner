@@ -25,7 +25,7 @@ class ShowCategory extends StatefulWidget {
 class _ShowCategoryState extends State<ShowCategory> {
   late int selectedIconNum, index;
   late final TaskService taskService;
-  late bool categoryIsEnabled;
+  bool categoryIsEnabled = false;
 
   @override
   void initState() {
@@ -51,6 +51,8 @@ class _ShowCategoryState extends State<ShowCategory> {
 
   @override
   Widget build(BuildContext context) {
+    setState(() => categoryIsEnabled = widget.categoryIsEnabled);
+
     return Column(
       children: [
         Row(
