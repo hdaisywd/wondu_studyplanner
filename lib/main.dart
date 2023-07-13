@@ -75,7 +75,8 @@ class _HomePageState extends State<HomePage> {
         List<Task> todayList = taskList
             .where((e) =>
                 DateTime(e.dueDate.year, e.dueDate.month, e.dueDate.day) ==
-                DateTime(now.year, now.month, now.day))
+                    DateTime(now.year, now.month, now.day) &&
+                e.isDeleted == false)
             .toList();
         return Scaffold(
           drawer: Drawer(

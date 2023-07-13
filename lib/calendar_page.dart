@@ -26,7 +26,8 @@ class _CalendarPageState extends State<CalendarPage> {
         List<Task> notTodayList = taskList
             .where((e) =>
                 DateTime(e.dueDate.year, e.dueDate.month, e.dueDate.day)
-                    .isAfter(DateTime(now.year, now.month, now.day)))
+                    .isAfter(DateTime(now.year, now.month, now.day)) &&
+                e.isDeleted == false)
             .toList();
 
         return Scaffold(
