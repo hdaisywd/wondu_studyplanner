@@ -105,6 +105,10 @@ class _DetailPageState extends State<DetailPage> {
                             dueDate: dueDate);
                         debugPrint(task.content);
                         debugPrint(task.dueDate.toString());
+                        taskService.updateCategory(
+                          index: widget.index,
+                          category: selectedIconNum,
+                        );
                         setState(() {
                           editButtonHidden = false;
                           categoryIsEnabled = false;

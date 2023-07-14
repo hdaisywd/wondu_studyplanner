@@ -42,10 +42,10 @@ class _ShowCategoryState extends State<ShowCategory> {
     setState(() {
       selectedIconNum = num;
       widget.onChanged(num);
-      widget.taskService.updateCategory(
-        index: index,
-        category: selectedIconNum,
-      );
+      // widget.taskService.updateCategory(
+      //   index: index,
+      //   category: selectedIconNum,
+      // );
     });
   }
 
