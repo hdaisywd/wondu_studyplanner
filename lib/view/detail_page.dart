@@ -46,6 +46,7 @@ class _DetailPageState extends State<DetailPage> {
 
     detailController.text = task.detail ?? '';
     selectedIconNum = task.category;
+    dueDate = task.dueDate;
 
     return GestureDetector(
       onTap: () {
