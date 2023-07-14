@@ -101,7 +101,7 @@ class _CategoryTasksScreenState extends State<CategoryTasksScreen> {
                     await Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => DetailPage(
+                        builder: (_) => EditPage(
                           index: taskService.taskList.indexOf(task),
                         ),
                       ),
