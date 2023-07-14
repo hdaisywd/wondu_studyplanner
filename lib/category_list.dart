@@ -77,27 +77,11 @@ class _CategoryTasksScreenState extends State<CategoryTasksScreen> {
             ),
           ),
           Expanded(
-            child: ListView.builder(
+            child: ListView.separated(
               itemCount: selectedTasks.length,
               itemBuilder: (context, index) {
                 Task task = selectedTasks[index];
 
-                // return ListTile(
-                //   title: Text(task.content),
-                //   subtitle: Text(task.dueDate.toString()),
-                //   onTap: () async {
-                //     await Navigator.push(
-                //       context,
-                //       MaterialPageRoute(
-                //         builder: (context) => EditPage(
-                //           index: taskService.taskList.indexOf(task),
-                //         ),
-                //       ),
-                //     );
-
-                //     setState(() {}); // 수정 후 화면 업데이트
-                //   },
-                // );
                 return ListTile(
                   // 메모 고정 아이콘
                   leading: Icon(
@@ -127,6 +111,14 @@ class _CategoryTasksScreenState extends State<CategoryTasksScreen> {
                           index: taskService.taskList.indexOf(task));
                     }
                   },
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return Divider(
+                  thickness: 1,
+                  height: 0,
+                  endIndent: 0,
+                  indent: 0,
                 );
               },
             ),
