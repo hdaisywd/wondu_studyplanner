@@ -29,6 +29,7 @@ class _EditPageState extends State<EditPage> {
 
   var editButtonHidden = false;
   DateTime dueDate = DateTime.now();
+  late final TaskService taskService;
 
   @override
   void initState() {
@@ -45,9 +46,13 @@ class _EditPageState extends State<EditPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    TaskService taskService = context.read<TaskService>();
+  void dispose() {
+    super.dispose();
+    taskService.dispose();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -77,11 +82,7 @@ class _EditPageState extends State<EditPage> {
           actions: [
             !editButtonHidden
                 ? TextButton(
-                    onPressed: () {
-                      setState(() {
-                        editButtonHidden = true;
-                      });
-                    },
+                    onPressed: () => setState(() => editButtonHidden = true),
                     style: TextButton.styleFrom(
                       foregroundColor: Colors.white,
                     ),
@@ -89,9 +90,7 @@ class _EditPageState extends State<EditPage> {
                   )
                 : TextButton(
                     onPressed: () {
-                      setState(() {
-                        editButtonHidden = false;
-                      });
+                      setState(() => editButtonHidden = false);
                       taskService.updateTask(
                           index: widget.index,
                           content: contentController.text,

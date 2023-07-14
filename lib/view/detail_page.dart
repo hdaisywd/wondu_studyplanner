@@ -36,10 +36,14 @@ class _DetailPageState extends State<DetailPage> {
   bool contentValidate = false;
   bool dueDateValidate = false;
 
+  late final TaskService taskService;
+  late final Task task;
+
   @override
-  Widget build(BuildContext context) {
-    TaskService taskService = context.read<TaskService>();
-    Task task = taskService.taskList[widget.index];
+  void initState() {
+    super.initState();
+    taskService = context.read<TaskService>();
+    task = taskService.taskList[widget.index];
 
     contentController.text = task.content;
     dateInput.text = DateFormat('yyyy-MM-dd').format(task.dueDate);
@@ -47,7 +51,10 @@ class _DetailPageState extends State<DetailPage> {
     detailController.text = task.detail ?? '';
     selectedIconNum = task.category;
     dueDate = task.dueDate;
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -137,8 +144,6 @@ class _DetailPageState extends State<DetailPage> {
                           ? 'please fill in the textfield'
                           : null),
                   onChanged: (value) {
-                    taskService.updateTask(
-                        index: widget.index, content: value, dueDate: dueDate);
                     setState(() {
                       contentController.text.isEmpty
                           ? contentValidate = true
@@ -210,8 +215,6 @@ class _DetailPageState extends State<DetailPage> {
                   maxLines: 8,
                   onChanged: (value) {
                     // fix: 상세 내용으로 변경
-                    taskService.updateDetail(
-                        index: widget.index, detail: value);
                   },
                 ),
                 Padding(
