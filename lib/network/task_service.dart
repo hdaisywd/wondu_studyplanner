@@ -96,9 +96,90 @@ class TaskService extends ChangeNotifier {
 
   List<Task> taskList = [
     Task(
-        content: '장보기 목록: 사과, 양파',
-        dueDate: DateTime(2020, 1, 1)), // 더미(dummy) 데이터
-    Task(content: '메모 메모', dueDate: DateTime(2020, 1, 1)), // 더미(dummy) 데이터
+        content: '이전 날짜1',
+        dueDate: DateTime(2020, 1, 1),
+        category: 1,
+        detail: '어제였습니다'), // 더미(dummy) 데이터
+    Task(
+        content: '이전 날짜2',
+        dueDate: DateTime(2020, 1, 1),
+        category: 2,
+        detail: '오늘이 아니라니'), // 더미(dummy) 데이터
+    Task(
+        content: '오늘입니다',
+        dueDate: DateTime(2023, 7, 14),
+        category: 3,
+        detail: '오늘이에요'), // 더미(dummy) 데이터
+    Task(
+        content: '내일이 아닙니다',
+        dueDate: DateTime(2023, 7, 14),
+        category: 1,
+        detail: '오늘이에요'), // 더미(dummy) 데이터
+    Task(
+        content: '7/14',
+        dueDate: DateTime(2023, 7, 14),
+        category: 2,
+        detail: '오늘입니다'), // 더미(dummy) 데이터
+    Task(
+        content: '메모 메모',
+        dueDate: DateTime(2023, 7, 14),
+        category: 4,
+        detail: '오늘이에요 오늘오늘오늘오늘오늘오늘오늘오늘오늘오늘오늘오늘오늘오늘오늘오늘오늘오늘오늘오늘'),
+    Task(
+        content: '오늘이 아닙니다',
+        dueDate: DateTime(2023, 7, 15),
+        category: 5,
+        detail: '오늘이 아닙니다'), // 더미(dummy) 데이터
+    Task(
+        content: '메모 메모가 오늘이 아닙니다',
+        dueDate: DateTime(2023, 7, 15),
+        category: 6,
+        detail: '메모 메모 오늘이 아녜요'),
+    Task(
+        content: '사자',
+        dueDate: DateTime(2023, 7, 16),
+        category: 5,
+        detail: '오늘이 아닙니다'), // 더미(dummy) 데이터
+    Task(
+        content: '고양이',
+        dueDate: DateTime(2023, 7, 17),
+        category: 6,
+        detail: '메모 메모 오늘이 아녜요'),
+    Task(
+        content: '강아지',
+        dueDate: DateTime(2023, 7, 20),
+        category: 4,
+        detail: '오늘이 아닙니다'), // 더미(dummy) 데이터
+    Task(
+        content: '원두',
+        dueDate: DateTime(2023, 7, 21),
+        category: 3,
+        detail: '메모 메모 오늘이 아녜요'),
+    Task(
+        content: '츄르',
+        dueDate: DateTime(2023, 8, 1),
+        category: 1,
+        detail: '오늘이 아닙니다'), // 더미(dummy) 데이터
+    Task(
+        content: '원두는 강아지',
+        dueDate: DateTime(2023, 8, 21),
+        category: 1,
+        detail: '메모 메모 오늘이 아녜요'),
+    Task(
+        content: '건물',
+        dueDate: DateTime(2023, 8, 3),
+        category: 1,
+        detail: '오늘이 아닙니다'), // 더미(dummy) 데이터
+    Task(
+        content: '운동장',
+        dueDate: DateTime(2023, 9, 21),
+        category: 2,
+        detail: '메모 메모 오늘이 아녜요'),
+    Task(
+        content: '축구장',
+        dueDate: DateTime(2023, 7, 21),
+        category: 2,
+        detail: '메모 메모 오늘이 아녜요'),
   ];
 
   createTask(
