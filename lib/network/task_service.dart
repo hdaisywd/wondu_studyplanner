@@ -113,7 +113,8 @@ class TaskService extends ChangeNotifier {
         detail: detail,
         category: category);
     taskList.add(task);
-    taskList.sort(((a, b) => a.dueDate.compareTo(b.dueDate)));
+    //taskList.sort(((a, b) => a.dueDate.compareTo(b.dueDate)));
+    sortList();
 
     notifyListeners();
     saveTaskList(); // Consumer<TaskService>의 builder 부분을 호출해서 화면 새로고침
@@ -127,7 +128,8 @@ class TaskService extends ChangeNotifier {
     task.content = content;
     task.dueDate = dueDate;
     task.updatedAt = DateTime.now();
-    taskList.sort(((a, b) => a.dueDate.compareTo(b.dueDate)));
+    //taskList.sort(((a, b) => a.dueDate.compareTo(b.dueDate)));
+    sortList();
     notifyListeners();
     saveTaskList();
   }
@@ -211,5 +213,14 @@ class TaskService extends ChangeNotifier {
 
     List taskJsonList = jsonDecode(jsonString);
     taskList = taskJsonList.map((json) => Task.fromJson(json)).toList();
+    sortList();
+  }
+
+  sortList() {
+    taskList.sort(((a, b) => a.dueDate.compareTo(b.dueDate)));
+    taskList = [
+      ...taskList.where((element) => element.isPinned),
+      ...taskList.where((element) => !element.isPinned),
+    ];
   }
 }
