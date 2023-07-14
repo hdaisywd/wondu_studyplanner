@@ -78,6 +78,15 @@ class _HomePageState extends State<HomePage> {
                     DateTime(now.year, now.month, now.day) &&
                 e.isDeleted == false)
             .toList();
+        List<Task> expired = taskList
+            .where((e) =>
+                DateTime(e.dueDate.year, e.dueDate.month, e.dueDate.day)
+                    .isBefore(DateTime(now.year, now.month, now.day)) &&
+                e.isDeleted == false)
+            .toList();
+        for (Task t in expired) {
+          taskService.updateDeleteTask(index: taskList.indexOf(t));
+        }
         return Scaffold(
           drawer: Drawer(
             child: ListView(
@@ -265,21 +274,8 @@ class _HomePageState extends State<HomePage> {
                               ],
                             ),
                           ),
-                          // Text(
-                          //   //if (task.is)
-                          //   task.content,
-                          //   maxLines: 3,
-                          //   overflow: TextOverflow.ellipsis,
-                          // ),
 
                           trailing: Icon(Icons.navigate_next),
-                          // trailing: Text(
-                          //     DateFormat('yyyy-MM-dd').format(task.dueDate)
-                          //     // task.dueDate.toString()
-                          //     // task.updatedAt == null
-                          //     //   ? ""
-                          //     //   : task.updatedAt.toString().substring(0, 16)
-                          //     ),
 
                           onTap: () async {
                             // 아이템 클릭시
@@ -299,7 +295,12 @@ class _HomePageState extends State<HomePage> {
                         ));
                   },
                   separatorBuilder: (BuildContext context, int index) {
-                    return Divider(thickness: 1);
+                    return Divider(
+                      thickness: 1,
+                      height: 0,
+                      indent: 0,
+                      endIndent: 0,
+                    );
                   },
                 ),
           floatingActionButton: FloatingActionButton(

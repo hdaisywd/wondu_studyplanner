@@ -129,7 +129,12 @@ class _CalendarPageState extends State<CalendarPage> {
                         ));
                   },
                   separatorBuilder: (BuildContext context, int index) {
-                    return Divider(thickness: 1);
+                    return Divider(
+                      thickness: 1,
+                      height: 0,
+                      indent: 0,
+                      endIndent: 0,
+                    );
                   },
                 ),
         );

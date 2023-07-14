@@ -69,7 +69,7 @@ class _SearchTaskState extends State<SearchTask> {
           // fix: 변경된 레이아웃으로 수정
           body: searchList.isEmpty
               ? Center(child: Text("메모를 작성해 주세요"))
-              : ListView.builder(
+              : ListView.separated(
                   itemCount: searchList.length, // taskList 개수 만큼 보여주기
                   itemBuilder: (context, index) {
                     Task task = searchList[index]; // index에 해당하는 task 가져오기
@@ -118,6 +118,14 @@ class _SearchTaskState extends State<SearchTask> {
                           taskService.deleteTask(index: taskList.indexOf(task));
                         }
                       },
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return Divider(
+                      thickness: 1,
+                      height: 0,
+                      indent: 0,
+                      endIndent: 0,
                     );
                   },
                 ),
