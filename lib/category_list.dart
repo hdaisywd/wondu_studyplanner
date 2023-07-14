@@ -6,7 +6,7 @@ import 'package:mytask/view/detail_page.dart';
 import 'view/edit_page.dart';
 
 class CategoryTasksScreen extends StatefulWidget {
-  const CategoryTasksScreen({super.key});
+  const CategoryTasksScreen({Key? key}) : super(key: key);
 
   @override
   _CategoryTasksScreenState createState() => _CategoryTasksScreenState();
@@ -25,7 +25,6 @@ class _CategoryTasksScreenState extends State<CategoryTasksScreen> {
       selectedCategory =
           categories.isNotEmpty ? categories[0] : selectedCategory;
     }
-    setState(() {}); // 초기화된 selectedCategory로 화면을 다시 빌드하여 새로고침
   }
 
   @override
@@ -88,27 +87,39 @@ class _CategoryTasksScreenState extends State<CategoryTasksScreen> {
                     getCategoryIcon(selectedTasks[index].category),
                   ),
                   // 메모 내용 (최대 3줄까지만 보여주도록)
-                  title: Text(
-                    task.content,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
+                  title: RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: task.content,
+                          style: TextStyle(color: Colors.black)),
+                        if (task.isPinned)
+                          WidgetSpan(
+                            child: 
+                              Icon(CupertinoIcons.pin_fill, size:14),
+                        ),
+                      ]
+                    ),
                   ),
+                  // Text(
+                  //   task.content,
+                  //   maxLines: 3,
+                  //   overflow: TextOverflow.ellipsis,
+                  // ),
                   trailing: Text(
                     DateFormat('yy/MM/dd').format(task.dueDate),
                   ),
                   onTap: () async {
-                    bool result = await Navigator.push(
+                    await Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => EditPage(
+                        builder: (context) => EditPage(
                           index: taskService.taskList.indexOf(task),
                         ),
                       ),
                     );
-                    if (result != null && result) {
-                      // Refresh the screen when the result is true
-                      setState(() {});
-                    }
+
+                    setState(() {});
                   },
                 );
               },
