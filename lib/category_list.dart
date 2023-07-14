@@ -97,8 +97,7 @@ class _CategoryTasksScreenState extends State<CategoryTasksScreen> {
                     DateFormat('yy/MM/dd').format(task.dueDate),
                   ),
                   onTap: () async {
-                    // 아이템 클릭시
-                    await Navigator.push(
+                    bool result = await Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (_) => EditPage(
@@ -106,9 +105,9 @@ class _CategoryTasksScreenState extends State<CategoryTasksScreen> {
                         ),
                       ),
                     );
-                    if (task.content.isEmpty) {
-                      taskService.deleteTask(
-                          index: taskService.taskList.indexOf(task));
+                    if (result != null && result) {
+                      // Refresh the screen when the result is true
+                      setState(() {});
                     }
                   },
                 );

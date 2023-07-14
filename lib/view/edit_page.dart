@@ -96,7 +96,7 @@ class _EditPageState extends State<EditPage> {
                           index: widget.index,
                           content: contentController.text,
                           dueDate: dueDate);
-                      Navigator.pop(context, true); // 수정된 데이터 반환
+                      Navigator.pop(context, true);
                     },
                     style: TextButton.styleFrom(
                       foregroundColor: Colors.white,
