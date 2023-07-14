@@ -102,10 +102,19 @@ class _CalendarPageState extends State<CalendarPage> {
                           //     ? Icon(CupertinoIcons.pin_fill)
                           //     : null,
                           // 메모 내용 (최대 3줄까지만 보여주도록)
-                          title: Text(
-                            task.content,
-                            maxLines: 3,
-                            overflow: TextOverflow.ellipsis,
+                          title: RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                    text: task.content,
+                                    style: TextStyle(color: Colors.black)),
+                                if (task.isPinned)
+                                  WidgetSpan(
+                                    child:
+                                        Icon(CupertinoIcons.pin_fill, size: 14),
+                                  ),
+                              ],
+                            ),
                           ),
                           trailing: Text(
                             DateFormat('yy/MM/dd').format(task.dueDate),
